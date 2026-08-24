@@ -219,3 +219,9 @@ __marimo__/
 
 # Collab-protocol: ignore parallel-agent worktrees, but keep .claude/resume committed
 .claude/worktrees/
+
+# Python backend
+backend/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
