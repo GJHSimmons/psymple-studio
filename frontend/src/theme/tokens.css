@@ -1,0 +1,73 @@
+/*
+ * Design tokens for Psymple Studio.
+ * Source of truth: design/design_handoff_psymple_studio/README.md
+ * Values are final, not placeholders — consume via var(--token), never hard-code.
+ */
+:root {
+  /* Color — surfaces & text */
+  --color-bg: #ffffff;
+  --color-surface: #f7f8f9;
+  --color-shell: #f1f3f4;
+  --color-text: #151a1d;
+  --color-divider: #e6e9ea;
+
+  /* Color — neutral ramp */
+  --color-neutral-100: #f4f6f6;
+  --color-neutral-200: #edf0f1;
+  --color-neutral-300: #dbe0e2;
+  --color-neutral-600: #6a7478;
+  --color-neutral-800: #394245;
+
+  /* Color — accent ramp (the one functional accent) */
+  --color-accent: #649ba3;
+  --color-accent-100: #eff5f6;
+  --color-accent-200: #dcebed;
+  --color-accent-300: #bcd7da;
+  --color-accent-600: #56888f;
+  --color-accent-700: #457077;
+  --color-accent-800: #345a60;
+  --color-accent-900: #25454a;
+
+  /* Color — secondary neutral-slate ramp (output ports, functional-type labels) */
+  --color-accent-2-100: #f1f3f4;
+  --color-accent-2-200: #e7eaec;
+  --color-accent-2-700: #4a555b;
+  --color-accent-2-800: #39434a;
+
+  /* Radii */
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-control-sm: 6px;
+  --radius-pill: 999px;
+
+  /* Shadows — faint, cool-slate tinted; lift true surfaces only */
+  --shadow-sm: 0 1px 3px rgba(28, 37, 41, 0.06), 0 1px 2px rgba(28, 37, 41, 0.04);
+  --shadow-md: 0 4px 12px rgba(28, 37, 41, 0.08);
+  --shadow-lg: 0 10px 30px rgba(28, 37, 41, 0.1);
+
+  /* Typography */
+  --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --tracking-heading: -0.015em;
+  --tracking-eyebrow: 0.1em;
+
+  /* Spacing rhythm (4–8px base) */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 11px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --space-7: 26px;
+
+  /* Layout constants */
+  --rail-width: 216px;
+  --rail-width-collapsed: 60px;
+  --panel-width: 296px;
+
+  /* Motion — short, calm */
+  --motion-fast: 0.12s;
+  --motion-base: 0.16s;
+  --motion-easing: ease;
+}
