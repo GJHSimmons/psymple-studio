@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Collab-protocol: ignore parallel-agent worktrees, but keep .claude/resume committed
+.claude/worktrees/
