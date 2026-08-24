@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/industry-31f033de-891d-449d-a09a-37a17aff22d5/styles.css">
+  <script src="_ds/industry-31f033de-891d-449d-a09a-37a17aff22d5/_ds_bundle.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    /* crisp-paper re-theme: white + grey structure, one meaningful blue */
+    :root{
+      --color-bg:#ffffff; --color-surface:#f7f8f9; --color-shell:#f1f3f4;
+      --color-text:#151a1d; --color-divider:#e6e9ea;
+      --color-neutral-100:#f4f6f6; --color-neutral-200:#edf0f1; --color-neutral-300:#dbe0e2;
+      --color-neutral-600:#6a7478; --color-neutral-800:#394245;
+      --color-accent:#649BA3;
+      --color-accent-100:#eff5f6; --color-accent-200:#dcebed; --color-accent-300:#bcd7da;
+      --color-accent-600:#56888f; --color-accent-700:#457077; --color-accent-800:#345a60; --color-accent-900:#25454a;
+      --color-accent-2-100:#f1f3f4; --color-accent-2-200:#e7eaec; --color-accent-2-700:#4a555b; --color-accent-2-800:#39434a;
+      --radius-md:8px;
+      --shadow-sm:0 1px 3px rgba(28,37,41,.06),0 1px 2px rgba(28,37,41,.04);
+      --shadow-md:0 4px 12px rgba(28,37,41,.08);
+      --shadow-lg:0 10px 30px rgba(28,37,41,.10);
+      --font-heading:"Helvetica Neue",Helvetica,Arial,sans-serif;
+      --font-body:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+    .blueprint{border-radius:12px;border-color:var(--color-divider)}
+    .card,.dialog{border-radius:12px}
+    .btn{border-radius:8px;font-weight:500;white-space:nowrap}
+    .btn-secondary{background:var(--color-bg)}
+    .tag{border-radius:999px;font-weight:500}
+    .input,.seg{border-radius:8px}
+    .seg-opt{border-radius:6px}
+    h1,h2,h3,h4,h5,h6{letter-spacing:-0.015em}
+    h6{letter-spacing:.08em}
+    html,body{height:100%;margin:0}
+    .psy-root{display:flex;height:100vh;overflow:hidden;background:var(--color-shell);color:var(--color-text);font-family:var(--font-body)}
+    .psy-rail{width:216px;flex:none;border-right:1px solid var(--color-divider);display:flex;flex-direction:column;background:var(--color-bg)}
+    .psy-nav-item{position:relative;display:flex;align-items:center;gap:10px;margin:1px 8px;padding:8px 10px;border-radius:8px;font-family:var(--font-body);font-weight:500;font-size:14px;color:var(--color-neutral-600);cursor:pointer;user-select:none;transition:color .15s}
+    .psy-nav-item::before{content:"";position:absolute;left:-8px;top:50%;width:3px;height:16px;margin-top:-8px;border-radius:0 2px 2px 0;background:var(--color-accent);opacity:0;transition:opacity .15s}
+    .psy-nav-item:hover{color:var(--color-text)}
+    .psy-nav-item.on{color:var(--color-text);font-weight:600}
+    .psy-nav-item.on::before{opacity:1}
+    .psy-nav-item svg{width:17px;height:17px;flex:none;stroke-width:1.6;color:var(--color-neutral-600)}
+    .psy-nav-item.on svg{color:var(--color-accent)}
+    .psy-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--color-shell)}
+    .psy-scroll{flex:1;overflow:auto}
+    .psy-mono{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+    .psy-node{position:absolute;background:color-mix(in srgb,var(--color-bg) 86%,transparent);backdrop-filter:blur(0.5px)}
+    .psy-port{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--color-bg);border:1.5px solid var(--color-accent);cursor:crosshair;transform:translate(-50%,-50%);z-index:6}
+    .psy-port:hover{background:var(--color-accent);box-shadow:0 0 0 3px var(--color-accent-200)}
+    .psy-port.varp{border-color:var(--color-neutral-600)}
+    .psy-port.armed{background:var(--color-accent);box-shadow:0 0 0 4px var(--color-accent-200)}
+    .psy-node .psy-ghost{opacity:0;transition:opacity .12s,box-shadow .12s}
+    .psy-node:hover .psy-ghost{opacity:.55}
+    .psy-ghost:hover{opacity:1!important;box-shadow:0 0 0 3px var(--color-accent-200)}
+    .psy-rail{transition:width .16s ease}
+    .psy-rail.collapsed{width:60px}
+    .psy-rail.collapsed .rail-label{display:none}
+    .psy-rail.collapsed>div:first-child{justify-content:center;padding-left:0;padding-right:0}
+    .psy-rail.collapsed .psy-nav-item{justify-content:center;padding-left:0;padding-right:0;margin:1px 8px}
+    .psy-rail-toggle{display:flex;align-items:center;gap:10px;margin:4px 10px 8px;padding:8px 10px;background:var(--color-bg);border:1px solid var(--color-divider);border-radius:8px;color:var(--color-neutral-800);font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer}
+    .psy-rail-toggle:hover{background:var(--color-neutral-100);border-color:var(--color-neutral-300);color:var(--color-text)}
+    .psy-rail-toggle svg{width:16px;height:16px;flex:none;stroke-width:1.6;transition:transform .16s ease}
+    .psy-rail.collapsed .psy-rail-toggle{justify-content:center;padding-left:0;padding-right:0;margin:4px 8px 8px}
+    .psy-rail.collapsed .psy-rail-toggle svg{transform:rotate(180deg)}
+    sub{font-size:.72em}sup{font-size:.72em}
+    .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;line-height:1.05;margin:0 .12em}
+    .frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .2em}
+    @container (max-width:640px){.psy-hint{display:none}}
+    input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:999px;background:var(--color-neutral-200);accent-color:var(--color-accent)}
+    input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:999px;background:transparent}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;margin-top:-4.5px;border-radius:50%;background:var(--color-bg);border:1.5px solid var(--color-accent);box-shadow:var(--shadow-sm);cursor:pointer}
+    input[type=range]:hover::-webkit-slider-thumb{border-color:var(--color-accent-600);background:var(--color-accent-100)}
+    input[type=range]::-moz-range-track{height:5px;border-radius:999px;background:var(--color-neutral-200)}
+    input[type=range]::-moz-range-progress{height:5px;border-radius:999px;background:var(--color-accent)}
+    input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--color-bg);border:1.5px solid var(--color-accent);box-shadow:var(--shadow-sm);cursor:pointer}
+    ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--color-neutral-300);border-radius:8px;border:2px solid var(--color-bg)}
+  </style>
+</helmet>
+<div class="psy-root">
+  <aside class="psy-rail {{ railCls }}">
+    <div style="padding:16px 16px 12px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--color-divider)">
+      <div style="width:26px;height:26px;border:1.5px solid var(--color-accent);border-radius:7px;position:relative;flex:none">
+        <div style="position:absolute;inset:5px;border:1.5px solid var(--color-accent);border-radius:50%"></div>
+      </div>
+      <div class="rail-label">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:19px;line-height:1">psymple</div>
+        <div class="text-muted" style="font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-family: var(--font-body)">compositional modelling</div>
+      </div>
+    </div>
+    <nav style="padding:8px 0;flex:1">
+      <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
+        <div class="psy-nav-item {{ item.cls }}" onClick="{{ item.go }}" title="{{ item.label }}">
+          <span data-icon="{{ item.icon }}"></span><span class="rail-label">{{ item.label }}</span>
+        </div>
+      </sc-for>
+    </nav>
+    <button class="psy-rail-toggle" onClick="{{ toggleRail }}" title="{{ railToggleTitle }}">
+      <span data-rail-chevron></span><span class="rail-label">Collapse</span>
+    </button>
+    <div style="padding:12px 16px;border-top:1px solid var(--color-divider);font-size:11px" class="text-muted rail-label">
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:var(--color-accent);display:inline-block;flex:none"></span>research prototype · v0.4</div>
+    </div>
+  </aside>
+  <div class="psy-main">{{ body }}</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+  state = {
+    screen: "dashboard",
+    pos: {},                    // node position overrides (relative to parent): id -> {x,y}
+    exp: {},                    // composite expand overrides: id -> bool (else depth-based)
+    sel: null,                  // selected node id
+    zoom: 1,
+    pan: {x:0,y:0},
+    overlay: null,              // null | "library" | "editor" — pop-ups over the builder
+    wires: {},                  // per-view live wire overrides (mutable copy of model wires)
+    selWire: null,              // {owner,kind,i} of a selected wire (for deletion)
+    wireFrom: null,             // {node,port} while dragging a new wire
+    mouse: null,                // {x,y} world coords of cursor during a wire drag
+    editObj: "pred_prey",
+    depth: 2,                   // how many nesting levels to expand by default
+    params: {a:0.4, K:10, b:0.2, c:0.1, d:0.2, x0:10, y0:2, tend:100},
+    solver: "continuous",
+    ran: true,
+    tab: "time",                // simulate output tab
+    ctab: "system",             // compilation tab
+    addedPorts: {},                // composite id -> {in:[[name,def]], out:[[name]], var:[name]}
+    newPort: null,                 // {compId, side} while naming a new port
+    newPortName: "",
+    newPortDef: "",
+    railCollapsed: false,
+  };
+
+  // ---- nested model tree -------------------------------------------------
+  // A composite is drawn as its own ported object that CONTAINS its children.
+  // Every node (leaf or container) carries ports: inputs top, outputs bottom,
+  // variables right. Wires live inside the composite that owns them; an
+  // endpoint node of "__self" refers to that composite's own port.
+  tree(){
+    const t = {
+      id:"ecosystem", name:"ecosystem", type:"composite",
+      ports:{in:[["a",0.4],["b",0.2],["c",0.1],["d",0.2],["K",10]], out:[], var:["x","y"]},
+      children:[
+        {id:"prey", name:"prey", type:"composite", x:26, y:22, note:"logistic prey",
+          ports:{in:[["r",0.4],["K",10]], out:[], var:["x"]},
+          children:[
+            {id:"pop", name:"pop", type:"variable", x:24, y:22, w:154, h:64,
+              ports:{in:[["r",null]], out:[], var:["x"]}, asg:[["x","r*x"]]},
+            {id:"limit", name:"limit", type:"variable", x:24, y:158, w:154, h:64,
+              ports:{in:[["r",null],["K",null]], out:[], var:["x"]}, asg:[["x","-r/K * x**2"]]},
+          ],
+          dwires:[
+            {from:{node:"__self",port:"r"}, to:{node:"pop",port:"r"}},
+            {from:{node:"__self",port:"r"}, to:{node:"limit",port:"r"}},
+            {from:{node:"__self",port:"K"}, to:{node:"limit",port:"K"}},
+          ],
+          vwires:[
+            {from:{node:"pop",port:"x"}, to:{node:"__self",port:"x"}},
+            {from:{node:"limit",port:"x"}, to:{node:"__self",port:"x"}},
+          ],
+        },
+        {id:"pred", name:"pred", type:"variable", x:26, y:320, w:154, h:64,
+          ports:{in:[["r",0.2]], out:[], var:["x"]}, asg:[["x","-r*x"]]},
+        {id:"pred_prey", name:"pred_prey", type:"variable", x:380, y:150, w:176, h:88,
+          ports:{in:[["r_1",0.2],["r_2",0.1]], out:[], var:["x","y"]}, asg:[["x","-r_1*x*y"],["y","r_2*x*y"]]},
+      ],
+      dwires:[
+        {from:{node:"__self",port:"a"}, to:{node:"prey",port:"r"}},
+        {from:{node:"__self",port:"K"}, to:{node:"prey",port:"K"}},
+        {from:{node:"__self",port:"b"}, to:{node:"pred_prey",port:"r_1"}},
+        {from:{node:"__self",port:"c"}, to:{node:"pred_prey",port:"r_2"}},
+        {from:{node:"__self",port:"d"}, to:{node:"pred",port:"r"}},
+      ],
+      vwires:[
+        {from:{node:"prey",port:"x"}, to:{node:"__self",port:"x"}},
+        {from:{node:"pred_prey",port:"x"}, to:{node:"__self",port:"x"}},
+        {from:{node:"pred",port:"x"}, to:{node:"__self",port:"y"}},
+        {from:{node:"pred_prey",port:"y"}, to:{node:"__self",port:"y"}},
+      ],
+    };
+    const add=this.state.addedPorts||{};
+    const walk=(n)=>{
+      if(n.type==="composite"&&add[n.id]){ const a=add[n.id];
+        n.ports={in:[...n.ports.in,...(a.in||[])],out:[...n.ports.out,...(a.out||[])],var:[...n.ports.var,...(a.var||[])]}; }
+      (n.children||[]).forEach(walk);
+    };
+    walk(t);
+    return t;
+  }
+  // flat lookups over the tree
+  compById(id){ const walk=(n)=> n.id===id ? n : (n.children||[]).reduce((f,c)=>f||walk(c),null); return walk(this.tree()); }
+  parentOf(id){ const walk=(n)=>{ if((n.children||[]).some(c=>c.id===id)) return n; return (n.children||[]).reduce((f,c)=>f||walk(c),null); }; return walk(this.tree()); }
+  composites(){ const out=[]; const walk=(n)=>{ if(n.type==="composite"){out.push(n);(n.children||[]).forEach(walk);} }; walk(this.tree()); return out; }
+  rpos(node){ const o=this.state.pos[node.id]; return o?{x:o.x,y:o.y}:{x:node.x||0,y:node.y||0}; }
+  isExp(node,level){ if(node.type!=="composite") return false; const e=this.state.exp[node.id]; return e!==undefined ? e : (level < this.state.depth); }
+  // recursive absolute layout -> boxes map {id:{x,y,w,h,node,level,exp}}
+  buildBoxes(){ const boxes={}; const HEAD=30;
+    const place=(node,x,y,level)=>{
+      const exp=this.isExp(node,level); let w,h;
+      if(node.type==="composite" && exp){
+        const cox=x+30, coy=y+HEAD+24; let mr=0,mb=0; const laid=[];
+        (node.children||[]).forEach(c=>{
+          const r=this.rpos(c);
+          let cy=r.y;
+          if(!this.state.pos[c.id]){ // un-dragged: keep it clear of siblings already placed
+            const probe=place(c,cox+r.x,coy+cy,level+1);
+            for(let guard=0;guard<8;guard++){
+              const hit=laid.find(p=>r.x<p.x+p.w && r.x+probe.w>p.x && cy<p.y+p.h && cy+probe.h>p.y);
+              if(!hit) break;
+              cy=hit.y+hit.h+24;
+            }
+          }
+          const s=place(c,cox+r.x,coy+cy,level+1);
+          laid.push({x:r.x,y:cy,w:s.w,h:s.h});
+          mr=Math.max(mr,r.x+s.w); mb=Math.max(mb,cy+s.h);
+        });
+        w=Math.max(220,60+mr); h=HEAD+24+mb+30;
+      } else if(node.type==="composite"){
+        const eq=this.compiledEqns(node)||[];
+        w=Math.max(node.w||180,190); h=HEAD+14+eq.length*22+30;
+      } else { w=node.w||156; h=Math.max((node.h||64)+14, 34+((node.asg?node.asg.length:1)*30)+14); }
+      boxes[node.id]={x,y,w,h,node,level,exp};
+      return {w,h};
+    };
+    place(this.tree(),0,0,0);
+    return boxes;
+  }
+
+  library(){
+    return [
+      {id:"prey", name:"prey", type:"composite", desc:"Logistic single-species growth", tags:["1 var","2 params"], asg:["dx/dt = r·x(1 − x/K)"]},
+      {id:"pred", name:"pred", type:"variable", desc:"Exponential decay population", tags:["1 var","1 param"], asg:["dx/dt = −r·x"]},
+      {id:"pred_prey", name:"pred_prey", type:"variable", desc:"Two-species interaction term", tags:["2 vars","2 params"], asg:["dx/dt = −r₁·x·y","dy/dt = r₂·x·y"]},
+      {id:"pop", name:"pop", type:"variable", desc:"Generic per-capita growth", tags:["1 var","1 param"], asg:["dx/dt = r·x"]},
+      {id:"limit", name:"limit", type:"variable", desc:"Carrying-capacity brake", tags:["1 var","2 params"], asg:["dx/dt = −r/K·x²"]},
+      {id:"f_drag", name:"f_drag", type:"functional", desc:"Drag multiplier μ", tags:["1 fn","4 inputs"], asg:["μ = C·ρ·A / (2·m)"]},
+      {id:"f_gravity", name:"f_gravity", type:"functional", desc:"Newtonian gravitation", tags:["1 fn","4 inputs"], asg:["F = G·m₁·m₂ / r²"]},
+    ];
+  }
+
+  // ---- integrator (logistic Lotka–Volterra) ------------------------------
+  integrate(){
+    const p=this.state.params, dt=0.05, n=Math.round(p.tend/dt);
+    let x=p.x0, y=p.y0; const T=[],X=[],Y=[];
+    for(let i=0;i<=n;i++){
+      const t=i*dt;
+      if(i%2===0){T.push(t);X.push(x);Y.push(y);}
+      const dx=p.a*x*(1-x/p.K)-p.b*x*y;
+      const dy=p.c*x*y-p.d*y;
+      x+=dx*dt; y+=dy*dt;
+      if(x<0)x=0; if(y<0)y=0;
+    }
+    return {T,X,Y};
+  }
+
+  // ---- LaTeX math rendering -----------------------------------------------
+  toLatex(expr){
+    let s=String(expr).replace(/\s+/g,"");
+    const SUP={"²":"2","³":"3"}; s=s.replace(/[²³]/g,c=>"^{"+SUP[c]+"}");
+    const SUB="₀₁₂₃₄₅₆₇₈₉"; s=s.replace(/[₀₁₂₃₄₅₆₇₈₉]+/g,m=>"_{"+[...m].map(c=>SUB.indexOf(c)).join("")+"}");
+    s=s.replace(/\*\*/g,"^");
+    s=s.replace(/([A-Za-z0-9_)\]}]+)\^([0-9]+)/g,(m,b,e)=>b+"^{"+e+"}");
+    s=s.replace(/\(agg\)/g,"(b{\\cdot}x{\\cdot}y)");
+    s=s.replace(/([\w{}^]+)\/\(([^()]*)\)/g,"\\frac{$1}{$2}");
+    s=s.replace(/([\w{}^]+)\/([\w{}^]+)/g,"\\frac{$1}{$2}");
+    s=s.replace(/\*/g," \\cdot ").replace(/·/g," \\cdot ");
+    s=s.replace(/−/g," - ").replace(/-/g," - ");
+    s=s.replace(/μ/g,"\\mu ").replace(/ρ/g,"\\rho ");
+    return s;
+  }
+  texHtml(latex){
+    try{ return window.katex ? window.katex.renderToString(latex,{throwOnError:false,output:"html"}) : latex; }
+    catch(e){ return latex; }
+  }
+  lhsHtml(name,isOde){ return this.texHtml(isOde?"\\frac{d"+name+"}{dt}":this.toLatex(name)); }
+  eqHtml(lhs,rhs,isOde){ return this.texHtml((isOde?"\\frac{d"+lhs+"}{dt}":this.toLatex(lhs))+"="+this.toLatex(rhs)); }
+  // live compiled equations for a composite (shown when collapsed)
+  compiledEqns(n){
+    return {
+      prey:[["x","r*x*(1 - x/K)"]],
+      ecosystem:[["x","a*x*(1 - x/K) - b*x*y"],["y","c*x*y - d*y"]],
+    }[n.id]||null;
+  }
+
+  npos(){ return {x:0,y:0}; }
+
+  // ---- user-defined composite ports --------------------------------------
+  addedNames(id,side){ const a=this.state.addedPorts[id]; if(!a) return []; return (a[side]||[]).map(p=>side==="var"?p:p[0]); }
+  beginAddPort(compId,side){ this.setState({newPort:{compId,side}, newPortName:"", newPortDef:""}); }
+  cancelAddPort(){ this.setState({newPort:null}); }
+  commitAddPort(){
+    const np=this.state.newPort; if(!np) return;
+    const name=(this.state.newPortName||"").trim(); if(!name) return;
+    const c=this.compById(np.compId); if(!c) return;
+    const exists=[...c.ports.in.map(p=>p[0]),...c.ports.out.map(p=>p[0]),...c.ports.var].includes(name);
+    if(exists){ this.setState({newPort:null}); return; }
+    let entry;
+    if(np.side==="in"){ const dv=this.state.newPortDef; entry=[name, dv===""||dv==null?null:(isNaN(+dv)?dv:+dv)]; }
+    else if(np.side==="out"){ entry=[name]; }
+    else { entry=name; }
+    this.setState(st=>{
+      const cur=st.addedPorts[np.compId]||{in:[],out:[],var:[]};
+      const next={in:cur.in.slice(),out:cur.out.slice(),var:cur.var.slice()};
+      next[np.side]=[...next[np.side],entry];
+      return {addedPorts:{...st.addedPorts,[np.compId]:next}, newPort:null, newPortName:"", newPortDef:""};
+    });
+  }
+  removeAddedPort(compId,side,name){
+    this.setState(st=>{
+      const cur=st.addedPorts[compId]; if(!cur) return {};
+      const filt=(cur[side]||[]).filter(p=>(side==="var"?p:p[0])!==name);
+      return {addedPorts:{...st.addedPorts,[compId]:{...cur,[side]:filt}}};
+    });
+  }
+  edgeAdders(h,n){
+    const hv=this.state.hoverAdd; if(!hv||hv.id!==n.id) return null;
+    const label={in:"Add input port (left edge)",out:"Add output port (right edge)",var:"Add variable port (bottom edge)"}[hv.side];
+    const st=hv.side==="in"?{left:"0%",top:(hv.pos*100)+"%"}:hv.side==="out"?{left:"100%",top:(hv.pos*100)+"%"}:{left:(hv.pos*100)+"%",top:"100%"};
+    return h("button",{key:"add"+hv.side,className:"psy-ghost",title:label,
+      onMouseDown:(e)=>e.stopPropagation(),
+      onClick:(e)=>{e.stopPropagation();this.beginAddPort(n.id,hv.side);},
+      style:{position:"absolute",transform:"translate(-50%,-50%)",width:"16px",height:"16px",borderRadius:"50%",
+        border:"1.5px dashed var(--color-accent)",background:"var(--color-bg)",color:"var(--color-accent)",cursor:"crosshair",
+        display:"grid",placeItems:"center",lineHeight:0,padding:0,zIndex:5,...st}},
+      h("svg",{width:9,height:9,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:3,strokeLinecap:"round"},h("path",{d:"M12 5v14M5 12h14"})));
+  }
+  edgeHover(e,n,bx){
+    const r=e.currentTarget.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top, w=r.width, ht=r.height, PAD=16, TOP=34;
+    const dLeft=x, dRight=w-x, dBottom=ht-y;
+    const min=Math.min(dLeft,dRight,dBottom);
+    let side,pos;
+    if(min===dBottom){ side="var"; pos=w<=PAD*2?0.5:Math.min(1-PAD/w,Math.max(PAD/w,x/w)); }
+    else { side=min===dLeft?"in":"out"; pos=ht<=PAD*2?0.5:Math.min(1-PAD/ht,Math.max(PAD/ht,y/ht)); }
+    this.setState({hoverAdd:{id:n.id,side,pos}});
+  }
+  clearEdgeHover(n){ this.setState(st=>(st.hoverAdd&&st.hoverAdd.id===n.id)?{hoverAdd:null}:null); }
+  renderPortMaker(h){
+    const np=this.state.newPort; if(!np) return null;
+    const sideLabel={in:"input",out:"output",var:"variable"}[np.side];
+    const commit=()=>this.commitAddPort();
+    const keyer=(e)=>{ if(e.key==="Enter"){e.preventDefault();commit();} if(e.key==="Escape"){e.preventDefault();this.cancelAddPort();} };
+    return h("div",{className:"dialog-backdrop",style:{zIndex:80},onMouseDown:(e)=>{ if(e.target===e.currentTarget) this.cancelAddPort(); }},
+      h("div",{className:"blueprint",style:{background:"var(--color-bg)",width:"350px",padding:"22px",boxShadow:"var(--shadow-lg)"}},
+                h("div",{className:"text-muted",style:{fontSize:"10px",letterSpacing:".12em",textTransform:"uppercase"}},"new "+sideLabel+" port · "+this.compById(np.compId).name),
+        h("h3",{style:{margin:"4px 0 18px",fontSize:"22px"}},"Add ",sideLabel," port"),
+        h("div",{className:"field",style:{marginBottom:"14px"}},
+          h("label",null,"Port name"),
+          h("input",{className:"input psy-mono",autoFocus:true,value:this.state.newPortName,placeholder:"e.g. r, K, x",
+            onChange:(e)=>this.setState({newPortName:e.target.value}),onKeyDown:keyer}),
+        ),
+        np.side==="in"&&h("div",{className:"field",style:{marginBottom:"14px"}},
+          h("label",null,"Default value ",h("span",{className:"text-muted",style:{textTransform:"none",letterSpacing:0,fontWeight:400}},"· optional")),
+          h("input",{className:"input psy-mono",value:this.state.newPortDef,placeholder:"— (wired at build time)",
+            onChange:(e)=>this.setState({newPortDef:e.target.value}),onKeyDown:keyer}),
+        ),
+        h("div",{style:{display:"flex",gap:"8px",justifyContent:"flex-end",marginTop:"6px"}},
+          h("button",{className:"btn btn-secondary",onClick:()=>this.cancelAddPort()},"Cancel"),
+          h("button",{className:"btn btn-primary",onClick:commit},this.icon(h,"check",15),"Add port"),
+        ),
+      ),
+    );
+  }
+
+  // ---- interaction -------------------------------------------------------
+  fitSoon(){ setTimeout(()=>this.fitView(),70); }
+  go(s){ this.setState({screen:s, overlay:null, wireFrom:null, selWire:null}, ()=>{ if(s==="builder") this.fitSoon(); }); }
+  select(id){ this.setState({sel:id, selWire:null}); }
+  toggleExp(id,cur){ this.setState(st=>({exp:{...st.exp,[id]:!cur}, selWire:null}), ()=>this.fitSoon()); }
+  setDepth(d){ this.setState({depth:d, exp:{}}, ()=>this.fitSoon()); }
+  openLibrary(){ this.setState({overlay:"library"}); }
+  openEditor(id){ this.setState({overlay:"editor", editObj:id||this.state.editObj}); }
+  closeOverlay(){ this.setState({overlay:null}); }
+
+  // ---- live wire store (mutable copy of a composite's wires) -------------
+  getWires(owner){
+    const w=this.state.wires[owner];
+    if(w) return w;
+    const c=this.compById(owner);
+    return {d:(c.dwires||[]).map(x=>({...x})), v:(c.vwires||[]).map(x=>({...x}))};
+  }
+  setWires(owner,next){ this.setState(st=>({wires:{...st.wires,[owner]:next}})); }
+  deleteWire(owner,kind,i){
+    const w=this.getWires(owner);
+    const next={d:w.d.slice(), v:w.v.slice()};
+    next[kind].splice(i,1);
+    this.setWires(owner,next);
+    this.setState({selWire:null});
+  }
+
+  startDrag(e,id){
+    e.stopPropagation(); e.preventDefault();
+    const start={mx:e.clientX,my:e.clientY};
+    const node=this.compById(id); const base=this.rpos(node);
+    const z=this.state.zoom;
+    const move=(ev)=>{
+      const nx=base.x+(ev.clientX-start.mx)/z, ny=base.y+(ev.clientY-start.my)/z;
+      this.setState(st=>({pos:{...st.pos,[id]:{x:Math.max(0,nx),y:Math.max(0,ny)}}}));
+    };
+    const up=()=>{document.removeEventListener("mousemove",move);document.removeEventListener("mouseup",up);};
+    document.addEventListener("mousemove",move);document.addEventListener("mouseup",up);
+    this.setState({sel:id, selWire:null});
+  }
+  startPan(e){
+    if(e.target!==e.currentTarget) return;
+    this.setState({sel:null, selWire:null});
+    const start={mx:e.clientX,my:e.clientY}, base={...this.state.pan};
+    const move=(ev)=>this.setState({pan:{x:base.x+(ev.clientX-start.mx),y:base.y+(ev.clientY-start.my)}});
+    const up=()=>{document.removeEventListener("mousemove",move);document.removeEventListener("mouseup",up);};
+    document.addEventListener("mousemove",move);document.addEventListener("mouseup",up);
+  }
+  worldXY(ev){
+    const el=this.canvasEl; if(!el) return {x:0,y:0};
+    const r=el.getBoundingClientRect(), S=this.state;
+    return {x:(ev.clientX-r.left-S.pan.x)/S.zoom, y:(ev.clientY-r.top-S.pan.y)/S.zoom};
+  }
+  levelOf(id){ let n=0,p=this.parentOf(id); while(p){n++;p=this.parentOf(p.id);} return n; }
+  ownerFor(na,nb){
+    let best=null,bl=-1;
+    this.composites().forEach(c=>{
+      const scope=new Set([c.id,...(c.children||[]).map(k=>k.id)]);
+      if(scope.has(na)&&scope.has(nb)){ const l=this.levelOf(c.id); if(l>bl){bl=l;best=c;} }
+    });
+    return best;
+  }
+  startWire(e,ep){
+    e.stopPropagation(); e.preventDefault();
+    this.setState({wireFrom:ep, mouse:this.worldXY(e), sel:null, selWire:null});
+    const move=(ev)=>this.setState({mouse:this.worldXY(ev)});
+    const up=()=>{
+      document.removeEventListener("mousemove",move);
+      document.removeEventListener("mouseup",up);
+      setTimeout(()=>{ if(this.state.wireFrom) this.setState({wireFrom:null,mouse:null}); },0);
+    };
+    document.addEventListener("mousemove",move);
+    document.addEventListener("mouseup",up);
+  }
+  dropWire(e,ep){
+    e.stopPropagation();
+    const from=this.state.wireFrom;
+    if(!from){ return; }
+    this.setState({wireFrom:null, mouse:null});
+    if(from.node===ep.node) return;
+    const owner=this.ownerFor(from.node,ep.node);
+    if(!owner) return;
+    // role within the owning composite: owner's own input emits; its var/out receive
+    const role=(x)=>{ const o=x.node===owner.id; return x.side==="in" ? (o?"src":"dst") : (o?"dst":"src"); };
+    const ra=role(from), rb=role(ep);
+    if(ra===rb) return;
+    const srcE=ra==="src"?from:ep, dstE=ra==="src"?ep:from;
+    const mk=(x)=>({node:x.node===owner.id?"__self":x.node, port:x.port});
+    const kind=(from.side==="var"&&ep.side==="var")?"v":"d";
+    const w=this.getWires(owner.id); const next={d:w.d.slice(),v:w.v.slice()};
+    next[kind].push({from:mk(srcE),to:mk(dstE)});
+    this.setWires(owner.id,next);
+  }
+  zoomBy(d){ this.setState(st=>({zoom:Math.max(0.4,Math.min(1.6,+(st.zoom+d).toFixed(2)))})); }
+  fitView(){
+    const el=this.canvasEl; if(!el) return;
+    const r=this.buildBoxes()[this.tree().id];
+    const gw=r.w, gh=r.h, cw=el.clientWidth, ch=el.clientHeight;
+    if(!cw||!ch) return;
+    const padL=24, padR=24, padT=28, padB=150;
+    const uw=cw-padL-padR, uh=ch-padT-padB;
+    const z=Math.max(0.35,Math.min(1.05, Math.min(uw/gw, uh/gh)));
+    const pan={x:padL+(uw-gw*z)/2 - r.x*z, y:padT+(uh-gh*z)/2 - r.y*z};
+    this.setState({zoom:+z.toFixed(3), pan});
+  }
+
+  setP(k,v){ this.setState(st=>({params:{...st.params,[k]:v}, ran:false})); }
+  run(){ this.setState({ran:true}); }
+
+  // ---- port geometry (absolute, from the boxes map) ----------------------
+  portPoint(ownerId,ep,boxes){
+    const id = ep.node==="__self" ? ownerId : ep.node;
+    const box=boxes[id]; if(!box) return null;
+    const n=box.node, owner=(ep.node==="__self");
+    const pin=n.ports.in.findIndex(a=>a[0]===ep.port);
+    if(pin>=0) return {x:box.x, y:box.y+30+(pin+1)/(n.ports.in.length+1)*(box.h-30), side:owner?"inOwner":"in"};
+    const pv=n.ports.var.indexOf(ep.port);
+    if(pv>=0) return {x:box.x+(pv+1)/(n.ports.var.length+1)*box.w, y:box.y+box.h, side:owner?"varOwner":"var"};
+    const po=n.ports.out.findIndex(a=>a[0]===ep.port);
+    if(po>=0) return {x:box.x+box.w, y:box.y+30+(po+1)/(n.ports.out.length+1)*(box.h-30), side:owner?"outOwner":"out"};
+    return {x:box.x+box.w/2, y:box.y+box.h/2, side:"in"};
+  }
+  portPtChild(ep,boxes){
+    const box=boxes[ep.node]; if(!box) return null;
+    const n=box.node;
+    const pin=n.ports.in.findIndex(a=>a[0]===ep.port);
+    if(pin>=0) return {x:box.x, y:box.y+30+(pin+1)/(n.ports.in.length+1)*(box.h-30), side:"in"};
+    const pv=n.ports.var.indexOf(ep.port);
+    if(pv>=0) return {x:box.x+(pv+1)/(n.ports.var.length+1)*box.w, y:box.y+box.h, side:"var"};
+    const po=n.ports.out.findIndex(a=>a[0]===ep.port);
+    if(po>=0) return {x:box.x+box.w, y:box.y+30+(po+1)/(n.ports.out.length+1)*(box.h-30), side:"out"};
+    return null;
+  }
+  wirePath(a,b){
+    const c={in:[-46,0],out:[46,0],var:[0,46],inOwner:[46,0],varOwner:[0,-46],outOwner:[-46,0]};
+    const [ax,ay]=c[a.side]||[0,0], [bx,by]=c[b.side]||[0,0];
+    return `M ${a.x} ${a.y} C ${a.x+ax} ${a.y+ay}, ${b.x+bx} ${b.y+by}, ${b.x} ${b.y}`;
+  }
+
+  // ====================================================================== //
+  renderVals(){
+    const h=React.createElement;
+    const S=this.state;
+    const icons={ dashboard:'grid', builder:'share', compile:'sigma', simulate:'chart' };
+    const navDefs=[
+      ["dashboard","Models"],["builder","Builder"],
+      ["compile","Compilation"],["simulate","Simulation"],
+    ];
+    const nav=navDefs.map(([id,label])=>({
+      label, icon:icons[id], cls:S.screen===id?"on":"", go:()=>this.go(id),
+    }));
+
+    const collapsed=S.railCollapsed;
+    return { nav,
+      railCls: collapsed?"collapsed":"",
+      railToggleTitle: collapsed?"Expand sidebar":"Collapse sidebar",
+      toggleRail: ()=>this.setState(st=>({railCollapsed:!st.railCollapsed})),
+      body:h(React.Fragment,null, this.renderBody(h), this.renderOverlay(h), this.renderPortMaker(h)) };
+  }
+
+  renderOverlay(h){
+    const ov=this.state.overlay; if(!ov) return null;
+    let title,sub,actions,content;
+    if(ov==="library"){
+      title="Component library"; sub="reusable ported objects · click an object to edit, or add it to the canvas";
+      actions=[h("button",{className:"btn btn-primary",key:"n"},this.icon(h,"plus",15),"New object")];
+      content=this.libraryContent(h);
+    } else {
+      const tn=this.compById(this.state.editObj);
+      const o=this.library().find(x=>x.id===this.state.editObj)||tn||this.library()[2];
+      title=h("span",null,"Object editor · ",h("span",{className:"psy-mono",style:{color:"var(--color-accent)"}},o.name));
+      sub="single ported object — opened from the builder";
+      actions=[h("button",{className:"btn btn-secondary",key:"d"},"Duplicate"),
+        h("button",{className:"btn btn-primary",key:"s",onClick:()=>this.closeOverlay()},this.icon(h,"check",15),"Save object")];
+      content=this.editorContent(h);
+    }
+    return h("div",{className:"dialog-backdrop",style:{zIndex:60,padding:"3vh 3vw"},
+      onMouseDown:(e)=>{ if(e.target===e.currentTarget) this.closeOverlay(); }},
+      h("div",{className:"blueprint",style:{width:"min(1080px,94vw)",height:"min(90vh,900px)",background:"var(--color-bg)",
+        display:"flex",flexDirection:"column",overflow:"hidden",boxShadow:"var(--shadow-lg)"}},
+        h("div",{style:{display:"flex",alignItems:"flex-end",justifyContent:"space-between",gap:"16px",
+          padding:"16px 22px",borderBottom:"1px solid var(--color-divider)",flex:"none"}},
+          h("div",null,
+            h("div",{className:"text-muted",style:{fontSize:"11px",letterSpacing:".12em",textTransform:"uppercase"}},sub),
+            h("h3",{style:{margin:"3px 0 0",fontSize:"23px"}},title),
+          ),
+          h("div",{style:{display:"flex",gap:"8px",alignItems:"center"}},
+            actions,
+            h("button",{className:"btn btn-secondary btn-icon",style:{marginLeft:"6px"},onClick:()=>this.closeOverlay(),title:"Close"},this.icon(h,"x",17)),
+          ),
+        ),
+        h("div",{className:"psy-scroll",style:{flex:1,minHeight:0,overflowX:"hidden"}},content),
+      ),
+    );
+  }
+
+  icon(h,name,sz){
+    const s=sz||17;
+    const P={fill:"none",stroke:"currentColor",strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round",width:s,height:s,viewBox:"0 0 24 24"};
+    const paths={
+      grid:["M3 3h7v7H3z","M14 3h7v7h-7z","M14 14h7v7h-7z","M3 14h7v7H3z"],
+      box:["M21 8v8l-9 5-9-5V8l9-5 9 5z","M3.3 7L12 12l8.7-5","M12 22V12"],
+      share:["M6 3v6","M6 15v6","M18 9v6","M6 9a3 3 0 100-6 3 3 0 000 6z","M6 21a3 3 0 100-6 3 3 0 000 6z","M18 15a3 3 0 100-6 3 3 0 000 6z","M8.5 8L15.5 11.5","M15.5 12.5L8.5 16"],
+      sliders:["M4 21v-7","M4 10V3","M12 21v-9","M12 8V3","M20 21v-5","M20 12V3","M1 14h6","M9 8h6","M17 16h6"],
+      function:["M9 4h4a2 2 0 012 2","M7 20c2 0 3-1 3-4V8c0-3 1-4 3-4","M5 12h6"],
+      chart:["M3 3v18h18","M7 14l3-4 3 3 4-6"],
+      play:["M6 4l14 8-14 8V4z"],
+      plus:["M12 5v14","M5 12h14"],
+      arrow:["M5 12h14","M13 6l6 6-6 6"],
+      fit:["M4 9V4h5","M20 9V4h-5","M4 15v5h5","M20 15v5h-5"],
+      x:["M6 6l12 12","M18 6L6 18"],
+      check:["M20 6L9 17l-5-5"],
+      dot:["M12 12h.01"],
+      eye:["M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z","M12 15a3 3 0 100-6 3 3 0 000 6z"],
+      chev:["M6 9l6 6 6-6"],
+    };
+    return h("svg",P,(paths[name]||[]).map((d,i)=>h("path",{key:i,d})));
+  }
+
+  chip(h,text,cls){ return h("span",{className:"tag "+(cls||"tag-neutral"),style:{whiteSpace:"nowrap",flex:"none"}},text); }
+
+  header(h,title,sub,actions){
+    return h("div",{style:{display:"flex",alignItems:"flex-end",justifyContent:"space-between",
+      padding:"18px 26px 16px",borderBottom:"1px solid var(--color-divider)",flex:"none"}},
+      h("div",null,
+        h("div",{className:"text-muted",style:{fontSize:"11px",letterSpacing:".12em",textTransform:"uppercase"}},sub),
+        h("h2",{style:{margin:"3px 0 0",fontSize:"27px"}},title),
+      ),
+      h("div",{style:{display:"flex",gap:"8px"}},actions||null),
+    );
+  }
+
+  renderBody(h){
+    switch(this.state.screen){
+      case "dashboard": return this.scrDashboard(h);
+      case "builder": return this.scrBuilder(h);
+      case "compile": return this.scrCompile(h);
+      case "simulate": return this.scrSimulate(h);
+      default: return this.scrDashboard(h);
+    }
+  }
+
+  // ---- DASHBOARD ---------------------------------------------------------
+  scrDashboard(h){
+    const models=[
+      {name:"Lotka–Volterra ecosystem", desc:"Logistic prey · predator · interaction", vars:2, obj:5, status:["compiled","tag-accent"], edited:"2h ago"},
+      {name:"Falling object w/ air resistance", desc:"Gravity + drag composite", vars:1, obj:3, status:["compiled","tag-accent"], edited:"yesterday"},
+      {name:"Tritrophic food chain", desc:"Prey · mid predator · apex predator", vars:3, obj:5, status:["draft","tag-neutral"], edited:"3d ago"},
+      {name:"Two-tank mixing", desc:"Coupled concentration ODEs", vars:2, obj:4, status:["needs params","tag-outline"], edited:"1w ago"},
+    ];
+    return h("div",{style:{display:"flex",flexDirection:"column",height:"100%"}},
+      this.header(h,"Models","workspace",[
+        h("button",{className:"btn btn-secondary",key:"i"},this.icon(h,"box",15),"Import"),
+        h("button",{className:"btn btn-primary",key:"n",onClick:()=>this.go("builder")},this.icon(h,"plus",15),"New model"),
+      ]),
+      h("div",{className:"psy-scroll",style:{padding:"26px"}},
+        h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"20px",maxWidth:"960px"}},
+          models.map((m,i)=>h("div",{key:i,className:"blueprint",style:{padding:"18px 18px 15px",cursor:"pointer",background:"var(--color-bg)"},
+            onClick:()=>this.go("builder")},
+                        h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"10px"}},
+              h("h4",{style:{margin:0,fontSize:"19px"}},m.name),
+              this.chip(h,m.status[0],m.status[1]),
+            ),
+            h("p",{className:"text-muted",style:{fontSize:"13px",margin:"6px 0 14px"}},m.desc),
+            h("div",{style:{display:"flex",gap:"20px",fontSize:"12px",borderTop:"1px solid var(--color-divider)",paddingTop:"11px"}},
+              h("span",null,h("b",{className:"psy-mono"},m.vars)," variables"),
+              h("span",null,h("b",{className:"psy-mono"},m.obj)," objects"),
+              h("span",{className:"text-muted",style:{marginLeft:"auto"}},"edited ",m.edited),
+            ),
+          )),
+        ),
+      ),
+    );
+  }
+
+  // ---- LIBRARY -----------------------------------------------------------
+  typeColor(t){ return t==="functional"?"tag-accent-2":t==="composite"?"tag-outline":"tag-accent"; }
+  libraryContent(h){
+    const lib=this.library();
+    const groups=[["variable","Variable objects — ODEs"],["functional","Functional objects — functions"],["composite","Composite objects — assemblies"]];
+    return h("div",{style:{padding:"22px 26px 30px"}},
+        h("input",{className:"input",placeholder:"Search objects…",style:{width:"260px",marginBottom:"22px"}}),
+        groups.map(([t,label])=>h("div",{key:t,style:{marginBottom:"30px"}},
+          h("div",{style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"14px"}},
+            h("h5",{style:{margin:0,textTransform:"uppercase",letterSpacing:".06em",fontSize:"13px"}},label),
+            h("span",{style:{flex:1,height:"1px",background:"var(--color-divider)"}}),
+          ),
+          h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(258px,1fr))",gap:"16px"}},
+            lib.filter(o=>o.type===t).map(o=>h("div",{key:o.id,className:"blueprint",style:{padding:"15px 16px",background:"var(--color-bg)",cursor:"pointer"},
+              onClick:()=>this.openEditor(o.id)},
+                            h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"8px"}},
+                h("span",{className:"psy-mono",style:{fontWeight:700,fontSize:"15px"}},o.name),
+                this.chip(h,o.type,this.typeColor(o.type)),
+              ),
+              h("p",{className:"text-muted",style:{fontSize:"12px",margin:"0 0 10px"}},o.desc),
+              h("div",{style:{borderTop:"1px solid var(--color-divider)",paddingTop:"9px",display:"flex",flexDirection:"column",gap:"3px"}},
+                o.asg.map((a,i)=>h("div",{key:i,style:{fontSize:"13px",color:"var(--color-accent-700)"},dangerouslySetInnerHTML:{__html:this.texHtml(this.toLatex(a))}})),
+              ),
+              h("div",{style:{display:"flex",gap:"5px",marginTop:"10px"}},o.tags.map((tg,i)=>this.chip(h,tg,"tag-neutral"))),
+            )),
+          ),
+        )),
+      );
+  }
+
+  // ---- BUILDER (nested canvas) -------------------------------------------
+  scrBuilder(h){
+    const S=this.state;
+    const root=this.tree();
+    const boxes=this.buildBoxes();
+    const layers={}; const handles=[]; const rubber=[];
+    const bucket=(owner)=>(layers[owner]||(layers[owner]=[]));
+    const drawW=(w,i,kind,owner)=>{
+      const a=this.portPoint(owner,w.from,boxes), b=this.portPoint(owner,w.to,boxes);
+      if(!a||!b) return;
+      const on=S.selWire&&S.selWire.owner===owner&&S.selWire.kind===kind&&S.selWire.i===i;
+      const col=kind==="v"?"var(--color-accent-800)":"var(--color-accent)";
+      bucket(owner).push(h("path",{key:owner+kind+i,d:this.wirePath(a,b),fill:"none",stroke:col,
+        strokeWidth:on?3.2:(kind==="v"?2.4:1.6),strokeDasharray:kind==="v"?"1 5":"none",strokeLinecap:"round",
+        markerEnd:kind==="d"?(on?"url(#wire-arrow-sel)":"url(#wire-arrow)"):undefined}));
+      const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+      handles.push(h("div",{key:"hdl"+owner+kind+i,
+        onMouseDown:(e)=>e.stopPropagation(),
+        onClick:(e)=>{e.stopPropagation(); on?this.deleteWire(owner,kind,i):this.setState({selWire:{owner,kind,i},sel:null});},
+        title:on?"Delete wire":"Select wire",
+        style:{position:"absolute",left:mx+"px",top:my+"px",width:on?"20px":"12px",height:on?"20px":"12px",
+          transform:"translate(-50%,-50%)",borderRadius:"50%",cursor:"pointer",zIndex:((boxes[owner]?boxes[owner].level:0)+1)*10+6,
+          display:"grid",placeItems:"center",
+          background:on?"var(--color-bg)":col,border:on?"1.5px solid var(--color-accent-2-800)":"2px solid var(--color-bg)",
+          boxShadow:"0 1px 3px rgba(21,26,29,.18)"}},
+        on?h("svg",{width:11,height:11,viewBox:"0 0 24 24",stroke:"var(--color-accent-2-800)",strokeWidth:3,fill:"none",strokeLinecap:"round"},
+          h("path",{d:"M6 6l12 12M18 6L6 18"})):null));
+    };
+    // draw the internal wires of every currently-expanded composite
+    this.composites().forEach(c=>{ if(!boxes[c.id]||!boxes[c.id].exp) return;
+      const W=this.getWires(c.id); W.d.forEach((w,i)=>drawW(w,i,"d",c.id)); W.v.forEach((w,i)=>drawW(w,i,"v",c.id)); });
+    if(S.wireFrom&&S.mouse){
+      const a=this.portPtChild(S.wireFrom,boxes);
+      if(a) rubber.push(h("path",{key:"rubber",d:this.wirePath(a,{x:S.mouse.x,y:S.mouse.y,side:"in"}),
+        fill:"none",stroke:"var(--color-accent)",strokeWidth:2,strokeDasharray:"4 4",strokeLinecap:"round"}));
+    }
+    const nodeEls=Object.keys(boxes).map(id=>boxes[id]).sort((a,b)=>a.level-b.level).map(bx=>this.renderNode(h,bx,boxes));
+
+    const world=h("div",{style:{position:"absolute",inset:0,transform:`translate(${S.pan.x}px,${S.pan.y}px) scale(${S.zoom})`,transformOrigin:"0 0"}},
+      Object.keys(layers).concat(["__rubber"]).map(owner=>{
+        const paths=owner==="__rubber"?rubber:layers[owner];
+        if(!paths||!paths.length) return null;
+        const z=owner==="__rubber"?100:((boxes[owner]?boxes[owner].level:0)+1)*10+5;
+        return h("svg",{key:"lay"+owner,style:{position:"absolute",top:0,left:0,width:"1200px",height:"760px",overflow:"visible",pointerEvents:"none",zIndex:z}},
+          owner==="__rubber"?null:h("defs",null,
+            h("marker",{id:"wire-arrow",viewBox:"0 0 10 10",refX:8.5,refY:5,markerWidth:6.5,markerHeight:6.5,orient:"auto-start-reverse"},
+              h("path",{d:"M0 0 L10 5 L0 10 z",fill:"var(--color-accent)"})),
+            h("marker",{id:"wire-arrow-sel",viewBox:"0 0 10 10",refX:7,refY:5,markerWidth:5.5,markerHeight:5.5,orient:"auto-start-reverse"},
+              h("path",{d:"M0 0 L10 5 L0 10 z",fill:"var(--color-accent)"}))),
+          paths);
+      }),
+      handles, nodeEls,
+    );
+    const sel=S.sel?this.compById(S.sel):null;
+    const seg=(k,l)=>h("label",{key:k,className:"seg-opt"},h("input",{type:"radio",name:"depth",checked:S.depth===k,onChange:()=>this.setDepth(k)}),l);
+
+    return h("div",{style:{display:"flex",flexDirection:"column",height:"100%"}},
+      h("div",{style:{display:"flex",alignItems:"center",flexWrap:"wrap",rowGap:"8px",gap:"14px",padding:"11px 20px",borderBottom:"1px solid var(--color-divider)",flex:"none"}},
+        h("div",{style:{display:"flex",alignItems:"baseline",gap:"9px",minWidth:0,overflow:"hidden"}},
+          h("span",{style:{fontFamily:"var(--font-heading)",fontWeight:600,fontSize:"18px",minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},root.name),
+          h("span",{className:"tag tag-outline"},"composite"),
+        ),
+        h("div",{style:{display:"flex",alignItems:"center",gap:"8px",marginLeft:"8px"}},
+          h("span",{className:"text-muted",style:{fontSize:"11px",textTransform:"uppercase",letterSpacing:".07em"}},"nesting"),
+          h("div",{className:"seg"},seg(1,"1"),seg(2,"2"),seg(3,"3")),
+        ),
+        h("div",{style:{flex:1}}),
+        h("div",{className:"blueprint",style:{display:"flex",background:"var(--color-bg)"}},
+          h("button",{className:"btn btn-secondary",style:{border:"none"},onClick:()=>this.zoomBy(-0.1)},"−"),
+          h("span",{className:"psy-mono",style:{display:"grid",placeItems:"center",width:"52px",fontSize:"12px",borderLeft:"1px solid var(--color-divider)",borderRight:"1px solid var(--color-divider)"}},Math.round(S.zoom*100)+"%"),
+          h("button",{className:"btn btn-secondary",style:{border:"none"},onClick:()=>this.zoomBy(0.1)},"+"),
+        ),
+        h("button",{className:"btn btn-secondary",onClick:()=>this.fitView()},this.icon(h,"fit",15),"Fit"),
+        h("button",{className:"btn btn-secondary",onClick:()=>this.openLibrary()},this.icon(h,"plus",15),"Add object"),
+        h("button",{className:"btn btn-primary",onClick:()=>this.go("compile")},this.icon(h,"arrow",15),"Compile"),
+      ),
+      h("div",{style:{flex:1,display:"flex",minHeight:0}},
+        h("div",{ref:(el)=>this.canvasEl=el,onMouseDown:(e)=>this.startPan(e),style:{position:"relative",flex:1,overflow:"hidden",cursor:"grab",
+          background:"var(--color-bg)",containerType:"inline-size",
+          backgroundImage:"radial-gradient(#d3d9db 1.15px,transparent 1.15px)",
+          backgroundSize:"22px 22px"}},
+          world,
+          h("div",{className:"blueprint",style:{position:"absolute",left:"16px",bottom:"16px",background:"var(--color-bg)",boxShadow:"var(--shadow-sm)",padding:"10px 13px",fontSize:"11px",display:"flex",flexDirection:"column",gap:"6px"}},
+                        h("div",{style:{fontFamily:"var(--font-heading)",fontWeight:600,fontSize:"11px",letterSpacing:".08em",textTransform:"uppercase"}},"wires"),
+            h("div",{style:{display:"flex",alignItems:"center",gap:"8px"}},h("svg",{width:26,height:8},h("line",{x1:0,y1:4,x2:20,y2:4,stroke:"var(--color-accent)",strokeWidth:1.6}),h("path",{d:"M18 1 L26 4 L18 7 z",fill:"var(--color-accent)"})),"directed — source → target"),
+            h("div",{style:{display:"flex",alignItems:"center",gap:"8px"}},h("svg",{width:26,height:8},h("line",{x1:0,y1:4,x2:26,y2:4,stroke:"var(--color-accent-800)",strokeWidth:2.4,strokeDasharray:"1 5",strokeLinecap:"round"})),"variable — aggregation"),
+            h("div",{style:{display:"flex",alignItems:"center",gap:"8px",marginTop:"2px"}},
+              h("span",{style:{fontSize:"10px",color:"var(--color-accent-700)"}},"● left in"),
+              h("span",{style:{fontSize:"10px",color:"var(--color-accent-2-800)"}},"● right out"),
+              h("span",{style:{fontSize:"10px",color:"var(--color-accent-800)"}},"● btm var"),
+            ),
+          ),
+          h("div",{className:"text-muted psy-hint",style:{position:"absolute",right:"16px",bottom:"16px",fontSize:"11px",fontStyle:"italic",textAlign:"right",lineHeight:1.5}},
+            h("div",null,"drag from a port onto another to wire · click a wire to delete"),
+            h("div",null,"click ⌄ on a composite to expand / collapse it")),
+        ),
+        this.inspector(h,sel),
+      ),
+    );
+  }
+
+  renderNode(h,bx,boxes){
+    const n=bx.node, S=this.state, selected=S.sel===n.id;
+    const isComp=n.type==="composite";
+    const expanded=isComp&&bx.exp;
+    const tc=n.type==="functional"?"var(--color-accent-2-800)":"var(--color-accent-800)";
+    const kid=(n.children||[]).length;
+    const port=(ep,cls,st,label,lst)=>h("div",{key:cls+ep.port,
+      className:"psy-port"+(ep.side==="var"?" varp":"")+(S.wireFrom&&S.wireFrom.node===n.id&&S.wireFrom.port===ep.port?" armed":""),
+      style:st,title:label,onMouseDown:(e)=>this.startWire(e,ep),onMouseUp:(e)=>this.dropWire(e,ep)});
+    const ins=n.ports.in, vars=n.ports.var, outs=n.ports.out;
+    return h("div",{key:n.id,className:"psy-node blueprint",
+      style:{left:bx.x+"px",top:bx.y+"px",width:bx.w+"px",height:bx.h+"px",zIndex:(bx.level+1)*10,
+        background:expanded?"color-mix(in srgb,var(--color-bg) 78%,transparent)":"color-mix(in srgb,var(--color-bg) 88%,transparent)",
+        borderStyle:expanded?"dashed":"solid",
+        borderColor:selected?"var(--color-accent)":(expanded?"var(--color-accent-300)":"var(--color-neutral-300)"),
+        boxShadow:selected?"0 0 0 3px var(--color-accent-200), var(--shadow-md)":"var(--shadow-md)",
+        cursor:"move"},
+      onMouseDown:(e)=>this.startDrag(e,n.id),
+      onClick:(e)=>{e.stopPropagation();this.select(n.id);},
+      onMouseMove:isComp?(e)=>this.edgeHover(e,n,bx):undefined,
+      onMouseLeave:isComp?()=>this.clearEdgeHover(n):undefined},
+            // header
+      h("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"6px",padding:"6px 9px 5px",
+        borderBottom:"1px solid color-mix(in srgb,var(--color-accent) 25%,transparent)",
+        background:"color-mix(in srgb,var(--color-accent) 8%,transparent)"}},
+        h("span",{style:{display:"flex",alignItems:"center",gap:"6px",minWidth:0}},
+          isComp&&h("button",{onMouseDown:(e)=>e.stopPropagation(),onClick:(e)=>{e.stopPropagation();this.toggleExp(n.id,expanded);},
+            title:expanded?"Collapse":"Expand",
+            style:{display:"grid",placeItems:"center",width:"20px",height:"20px",flex:"none",border:"1.5px solid color-mix(in srgb,var(--color-accent) 45%,transparent)",borderRadius:"4px",background:"color-mix(in srgb,var(--color-accent) 10%,transparent)",cursor:"pointer",padding:0,color:"var(--color-accent)",lineHeight:0,transform:expanded?"none":"rotate(-90deg)",transition:"transform .12s"}},this.icon(h,"chev",14)),
+          h("span",{className:"psy-mono",style:{fontWeight:700,fontSize:"14px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},n.name),
+        ),
+        h("span",{style:{fontSize:"9px",letterSpacing:".08em",textTransform:"uppercase",color:tc,fontFamily:"var(--font-heading)",fontWeight:600,flex:"none"}},
+          n.type==="functional"?"fn":isComp?"cmp":"ode"),
+      ),
+      // body — only for leaves and collapsed composites (expanded ones host children)
+      !expanded&&h("div",{style:{padding:"6px 9px 10px",fontSize:"12px",color:"var(--color-accent-700)"}},
+        isComp
+          ? (this.compiledEqns(n)
+              ? h("div",{style:{display:"flex",flexDirection:"column",gap:"2px"}},
+                  this.compiledEqns(n).map((a,i)=>h("span",{key:i,className:"psy-mono",style:{fontSize:"12px",color:"var(--color-accent-700)"},
+                    dangerouslySetInnerHTML:{__html:this.eqHtml(a[0],a[1],true)}})),
+                  h("div",{className:"text-muted",style:{fontSize:"10px",fontStyle:"italic",marginTop:"2px",display:"flex",alignItems:"center",gap:"5px"}},
+                    h("span",{style:{width:"5px",height:"5px",borderRadius:"50%",background:"var(--color-accent)",display:"inline-block",flex:"none"}}),
+                    "live · "+kid+" object"+(kid===1?"":"s")))
+              : h("div",null,
+                  h("div",{className:"text-muted",style:{fontStyle:"italic",fontSize:"11px"}},n.note||"composite"),
+                  h("div",{className:"text-muted",style:{fontSize:"11px",marginTop:"3px"}},kid+" object"+(kid===1?"":"s")+" inside")))
+          : h("div",{style:{display:"flex",flexDirection:"column",gap:"3px"}},
+              n.asg.map((a,i)=>h("span",{key:i,className:"psy-mono",dangerouslySetInnerHTML:{__html:this.eqHtml(a[0],a[1],true)}}))),
+      ),
+      // ports
+      ins.map((a,i)=>port({node:n.id,port:a[0],side:"in"},"i",{left:"0%",top:"calc(30px + (100% - 30px) * "+((i+1)/(ins.length+1))+")"},"input "+a[0])),
+      outs.map((a,i)=>port({node:n.id,port:a[0],side:"out"},"o",{left:"100%",top:"calc(30px + (100% - 30px) * "+((i+1)/(outs.length+1))+")"},"output "+a[0])),
+      vars.map((v,i)=>port({node:n.id,port:v,side:"var"},"v",{left:(i+1)/(vars.length+1)*100+"%",top:"100%"},"variable "+v)),
+      // port labels — inputs left, outputs right, variables bottom (clear of the name)
+      ins.map((a,i)=>h("span",{key:"il"+a[0],className:"psy-mono",style:{position:"absolute",left:"-4px",top:"calc(35px + (100% - 30px) * "+((i+1)/(ins.length+1))+")",transform:"translate(-100%,0)",fontSize:"10px",color:"var(--color-accent-700)",whiteSpace:"nowrap"}},a[0])),
+      outs.map((a,i)=>h("span",{key:"ol"+a[0],className:"psy-mono",style:{position:"absolute",left:"calc(100% + 4px)",top:"calc(35px + (100% - 30px) * "+((i+1)/(outs.length+1))+")",fontSize:"10px",color:"var(--color-accent-2-800)",fontWeight:700,whiteSpace:"nowrap"}},a[0])),
+      vars.map((v,i)=>h("span",{key:"vl"+v,className:"psy-mono",style:{position:"absolute",left:"calc("+((i+1)/(vars.length+1)*100)+"% + 5px)",top:"calc(100% + 4px)",fontSize:"10px",color:"var(--color-accent-800)",fontWeight:700,whiteSpace:"nowrap"}},v)),
+      isComp&&this.edgeAdders(h,n),
+    );
+  }
+
+  inspector(h,sel){
+    if(!sel) return h("div",{style:{width:"296px",flex:"none",borderLeft:"1px solid var(--color-divider)",padding:"22px 20px",background:"var(--color-bg)"}},
+      h("div",{className:"text-muted",style:{fontSize:"13px",textAlign:"center",marginTop:"40px",lineHeight:1.6}},
+        this.icon(h,"eye",26),
+        h("p",{style:{marginTop:"12px"}},"Select an object on the canvas to inspect its ports, assignments and wiring."),
+      ),
+    );
+    const isComp=sel.type==="composite";
+    const P=sel.ports;
+    const wires=isComp?this.getWires(sel.id):null;
+    const wlabel=(ep)=> (ep.node==="__self"?sel.name:ep.node)+"."+ep.port;
+    return h("div",{style:{width:"296px",flex:"none",borderLeft:"1px solid var(--color-divider)",display:"flex",flexDirection:"column",background:"var(--color-bg)"}},
+      h("div",{style:{padding:"16px 18px",borderBottom:"1px solid var(--color-divider)"}},
+        h("div",{className:"text-muted",style:{fontSize:"10px",letterSpacing:".12em",textTransform:"uppercase"}},sel.type+" ported object"),
+        h("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:"2px"}},
+          h("span",{className:"psy-mono",style:{fontWeight:700,fontSize:"18px"}},sel.name),
+          h("button",{className:"btn btn-ghost",style:{fontSize:"12px"},onClick:()=>this.openEditor(sel.id)},"Edit →"),
+        ),
+      ),
+      h("div",{className:"psy-scroll",style:{padding:"16px 18px",fontSize:"13px"}},
+        // leaves: assignments. composites: NO assignments (they emerge from wiring).
+        !isComp && this.inspSection(h,"Assignments",
+          sel.asg.map((a,i)=>h("div",{key:i,style:{padding:"8px 10px",border:"1px solid var(--color-divider)",marginBottom:"7px"}},
+            h("span",{className:"psy-mono",style:{fontSize:"14px"},dangerouslySetInnerHTML:{__html:this.eqHtml(a[0],a[1],true)}})
+          )),
+        ),
+        // ports (all objects)
+        (P.in.length>0)&&this.inspSection(h,"Input ports",
+          P.in.map((a,i)=>h("div",{key:i,style:{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"1px solid var(--color-divider)"}},
+            h("span",{className:"psy-mono",style:{color:"var(--color-accent)"}},a[0]),
+            h("span",{className:"psy-mono text-muted"},a[1]==null?"— (wired)":"default "+a[1]),
+          )),
+        ),
+        (P.var.length>0)&&this.inspSection(h,"Variable ports",
+          h("div",{style:{display:"flex",gap:"6px",flexWrap:"wrap"}},P.var.map((v,i)=>this.chip(h,v,"tag-outline"))),
+        ),
+        (P.out.length>0)&&this.inspSection(h,"Output ports",
+          h("div",{style:{display:"flex",gap:"6px",flexWrap:"wrap"}},P.out.map((v,i)=>this.chip(h,v[0],"tag-accent-2"))),
+        ),
+        // composites: editable wire list, in sync with the canvas
+        isComp && this.inspSection(h,
+          h("span",{style:{display:"flex",alignItems:"center",justifyContent:"space-between"}},"Internal wires",
+            h("span",{className:"text-muted",style:{fontSize:"10px",fontWeight:400,textTransform:"none",letterSpacing:0}},(wires.d.length+wires.v.length)+" total")),
+          h("div",null,
+            [["d","directed","var(--color-accent)"],["v","variable","var(--color-accent-800)"]].flatMap(([k,lbl,col])=>
+              wires[k].map((w,i)=>h("div",{key:k+i,style:{display:"flex",alignItems:"center",gap:"7px",padding:"5px 0",borderBottom:"1px solid var(--color-divider)"}},
+                h("span",{style:{width:"7px",height:"7px",borderRadius:"50%",background:col,flex:"none"}}),
+                h("span",{className:"psy-mono",style:{fontSize:"11px",flex:1,minWidth:0,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},wlabel(w.from)," → ",wlabel(w.to)),
+                h("button",{className:"btn btn-ghost",style:{padding:"2px",flex:"none"},title:"Delete wire",onClick:()=>this.deleteWire(sel.id,k,i)},this.icon(h,"x",13)),
+              ))),
+            (wires.d.length+wires.v.length)===0&&h("div",{className:"text-muted",style:{fontSize:"12px"}},"No wires yet — drag between ports on the canvas."),
+            h("div",{className:"text-muted",style:{fontSize:"11px",marginTop:"9px",fontStyle:"italic"}},"Edits here and on the canvas stay in sync."),
+          ),
+        ),
+        // live compile preview (leaves + prey shown concretely)
+        this.inspSection(h,
+          h("span",{style:{display:"inline-flex",alignItems:"center",gap:"7px"}},"Compiles to",
+            h("span",{style:{display:"inline-flex",alignItems:"center",gap:"4px",fontSize:"9px",fontFamily:"var(--font-body)",fontWeight:600,letterSpacing:".08em",padding:"1px 6px",borderRadius:"3px",background:"var(--color-accent)",color:"var(--color-bg)"}},
+              h("span",{style:{width:"5px",height:"5px",borderRadius:"50%",background:"var(--color-bg)"}}),"LIVE")),
+          h("div",null,
+            (isComp&&sel.id==="prey"?[["x","r*x*(1 - x/K)"]]:isComp?null:sel.asg)
+              ? (isComp&&sel.id==="prey"?[["x","r*x*(1 - x/K)"]]:sel.asg).map((a,i)=>
+                  h("div",{key:i,style:{padding:"8px 10px",background:"color-mix(in srgb,var(--color-accent) 8%,transparent)",border:"1px solid color-mix(in srgb,var(--color-accent) 30%,transparent)",marginBottom:"6px"}},
+                    h("span",{className:"psy-mono",style:{fontSize:"14px"},dangerouslySetInnerHTML:{__html:this.eqHtml(a[0],a[1],true)}})))
+              : h("div",{className:"text-muted",style:{fontStyle:"italic",fontSize:"12px"}},"aggregated from "+ (sel.children||[]).length +" objects on compile"),
+            h("div",{className:"text-muted",style:{fontSize:"11px",marginTop:"2px"}},"updates as you edit and wire"),
+          ),
+        ),
+      ),
+    );
+  }
+  inspSection(h,title,body){
+    return h("div",{style:{marginBottom:"20px"}},
+      h("h6",{style:{margin:"0 0 9px",fontSize:"11px"}},title),body);
+  }
+
+  // ---- EDITOR (pop-up from builder) --------------------------------------
+  editorContent(h){
+    const treeNode=this.compById(this.state.editObj);
+    const o=this.library().find(x=>x.id===this.state.editObj)
+      || (treeNode?{id:treeNode.id,name:treeNode.name,type:treeNode.type}:this.library()[2]);
+    const raw={
+      pred_prey:[["x","-r_1*x*y"],["y","r_2*x*y"]],
+      prey:[["x","r*x*(1 - x/K)"]],
+      pred:[["x","-r*x"]],
+      pop:[["x","r*x"]],
+      limit:[["x","-r/K * x**2"]],
+      f_drag:[["mu","C*rho*A / (2*m)"]],
+      f_gravity:[["F","G*m_1*m_2 / (r**2)"]],
+    }[o.id]||[["x","r*x"]];
+    const isFn=o.type==="functional";
+    const isComp=o.type==="composite";
+    const ports={
+      pred_prey:{in:[["r_1",0.2],["r_2",0.1]],var:["x","y"],out:[]},
+      pred:{in:[["r",0.2]],var:["x"],out:[]},
+      prey:{in:[["r",0.4],["K",10]],var:["x"],out:[]},
+      pop:{in:[["r",null]],var:["x"],out:[]},
+      limit:{in:[["r",null],["K",null]],var:["x"],out:[]},
+      f_drag:{in:[["C",null],["rho",null],["A",null],["m",null]],var:[],out:[["mu"]]},
+      f_gravity:{in:[["G",6.67e-11],["m_1",null],["m_2",null],["r",null]],var:[],out:[["F"]]},
+    }[o.id]||(treeNode?{in:treeNode.ports.in||[],var:treeNode.ports.var||[],out:treeNode.ports.out||[]}:{in:[],var:[],out:[]});
+
+    const addCb=(side)=>isComp?()=>this.beginAddPort(o.id,side):null;
+    const rmCb=(side)=>isComp?(name)=>this.removeAddedPort(o.id,side,name):null;
+    const portsPanel=h("div",{className:"blueprint",style:{background:"var(--color-bg)",padding:"18px"}},
+            h("h5",{style:{fontSize:"14px",textTransform:"uppercase",letterSpacing:".06em",marginBottom:"4px"}},"Ports"),
+      h("p",{className:"text-muted",style:{fontSize:"11px",marginBottom:"16px"}},
+        isComp?"Define this composite's own ports — add inputs (left), outputs (right) and variables (bottom) here or by hovering an edge on the canvas."
+              :"Auto-derived from assignments. Inputs left · outputs right · variables bottom."),
+      this.portGroup(h,"Input ports",ports.in.map(a=>({n:a[0],d:a[1]})),"var(--color-accent)",true,
+        isComp?null:"Each value is a default. Connecting a wire to the port overrides it at build time.",
+        addCb("in"),rmCb("in"),this.addedNames(o.id,"in")),
+      (isComp||ports.var.length>0)&&this.portGroup(h,"Variable ports",ports.var.map(v=>({n:v})),"var(--color-accent-800)",false,null,
+        addCb("var"),rmCb("var"),this.addedNames(o.id,"var")),
+      (isComp||ports.out.length>0)&&this.portGroup(h,"Output ports",ports.out.map(a=>({n:a[0]})),"var(--color-accent-2-800)",false,null,
+        addCb("out"),rmCb("out"),this.addedNames(o.id,"out")),
+    );
+    const nameRow=h("div",{style:{display:"flex",gap:"14px",marginBottom:"24px"}},
+      h("div",{className:"field",style:{flex:1}},h("label",null,"Object name"),h("input",{className:"input psy-mono",defaultValue:o.name})),
+      h("div",{className:"field",style:{width:"200px"}},h("label",null,"Type"),
+        h("div",{className:"input",style:{display:"flex",alignItems:"center"}},o.type+" ported object")),
+    );
+
+    if(isComp){
+      // composite editor: name, ports, editable WIRE list (no assignments)
+      const node=this.compById(o.id);
+      const wires=node?this.getWires(o.id):{d:[],v:[]};
+      const wlabel=(ep)=> (ep.node==="__self"?o.name:ep.node)+"."+ep.port;
+      const childNames=(node&&node.children||[]).map(c=>c.name);
+      return h("div",{style:{padding:"26px",display:"grid",gridTemplateColumns:"1fr 340px",gap:"26px",alignItems:"start"}},
+        h("div",null,
+          nameRow,
+          h("div",{style:{display:"flex",alignItems:"center",gap:"8px",padding:"11px 14px",marginBottom:"22px",background:"color-mix(in srgb,var(--color-accent) 8%,transparent)",border:"1px solid color-mix(in srgb,var(--color-accent) 25%,transparent)",borderRadius:"5px"}},
+            this.icon(h,"share",15),
+            h("span",{style:{fontSize:"12.5px",color:"var(--color-accent-800)"}},"A composite has no assignments of its own — its equations emerge from how its ",h("b",null,childNames.length+" contained objects")," are wired. Edit the wiring below or directly on the canvas; the two stay in sync."),
+          ),
+          h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"12px"}},
+            h("h5",{style:{fontSize:"14px",textTransform:"uppercase",letterSpacing:".06em",margin:0}},"Wires"),
+            h("button",{className:"btn btn-secondary",style:{fontSize:"12px",padding:"5px 10px"}},this.icon(h,"plus",14),"Add wire"),
+          ),
+          [["d","directed","functional substitution","var(--color-accent)"],["v","variable","aggregation","var(--color-accent-800)"]].map(([k,lbl,sub,col])=>
+            h("div",{key:k,style:{marginBottom:"16px"}},
+              h("div",{style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"8px"}},
+                h("span",{style:{width:"16px",height:"3px",background:col,borderRadius:"2px"}}),
+                h("span",{style:{fontFamily:"var(--font-heading)",fontWeight:600,fontSize:"13px"}},lbl+" wires"),
+                h("span",{className:"text-muted",style:{fontSize:"11px"}},"· "+sub),
+              ),
+              wires[k].length===0?h("div",{className:"text-muted",style:{fontSize:"12px",padding:"4px 0"}},"none"):
+              wires[k].map((w,i)=>h("div",{key:i,className:"blueprint",style:{background:"var(--color-bg)",padding:"9px 12px",marginBottom:"7px",display:"flex",alignItems:"center",gap:"10px"}},
+                                h("span",{className:"psy-mono",style:{flex:1,fontSize:"13px"}},
+                  h("span",{style:{color:"var(--color-accent)"}},wlabel(w.from)),
+                  h("span",{className:"text-muted"}," → "),
+                  h("span",{style:{color:"var(--color-accent-800)"}},wlabel(w.to))),
+                h("button",{className:"btn btn-ghost",style:{padding:"4px"},title:"Delete wire",onClick:()=>this.deleteWire(o.id,k,i)},this.icon(h,"x",15)),
+              )),
+            )),
+        ),
+        portsPanel,
+      );
+    }
+
+    // leaf editor (variable / functional): assignments + ports
+    return h("div",{style:{padding:"26px",display:"grid",gridTemplateColumns:"1fr 340px",gap:"26px",alignItems:"start"}},
+        h("div",null,
+          nameRow,
+          h("h5",{style:{fontSize:"14px",textTransform:"uppercase",letterSpacing:".06em",marginBottom:"12px"}},
+            isFn?"Parameter assignments":"Differential assignments"),
+          raw.map((a,i)=>h("div",{key:i,className:"blueprint",style:{background:"var(--color-bg)",padding:"14px 16px",marginBottom:"12px"}},
+                        h("div",{style:{display:"flex",alignItems:"center",gap:"10px"}},
+              h("div",{className:"psy-mono",style:{minWidth:"46px",textAlign:"right",color:"var(--color-accent)",fontWeight:700},
+                dangerouslySetInnerHTML:{__html:this.lhsHtml(a[0],!isFn)}}),
+              h("span",{style:{fontSize:"18px"}},"="),
+              h("input",{className:"input psy-mono",defaultValue:a[1],style:{flex:1}}),
+              h("button",{className:"btn btn-ghost",style:{padding:"4px"}},this.icon(h,"x",15)),
+            ),
+            h("div",{style:{marginTop:"11px",padding:"11px 12px",background:"var(--color-surface)",borderTop:"1px solid var(--color-divider)",display:"flex",alignItems:"center",gap:"10px"}},
+              h("span",{className:"text-muted",style:{fontSize:"10px",letterSpacing:".1em",textTransform:"uppercase"}},"preview"),
+              h("span",{className:"psy-mono",style:{fontSize:"17px"},dangerouslySetInnerHTML:{__html:this.eqHtml(a[0],a[1],!isFn)}}),
+            ),
+          )),
+          h("button",{className:"btn btn-secondary"},this.icon(h,"plus",15),"Add assignment"),
+        ),
+        portsPanel,
+      );
+  }
+  portGroup(h,title,items,color,withDef,note,onAdd,onRemove,removable){
+    removable=removable||[];
+    return h("div",{style:{marginBottom:"18px"}},
+      h("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"8px",marginBottom:note?"3px":"7px"}},
+        h("h6",{style:{margin:0,fontSize:"10px"}},title),
+        onAdd&&h("button",{className:"btn btn-ghost",style:{fontSize:"11px",padding:"2px 7px"},onClick:onAdd},this.icon(h,"plus",12),"Add"),
+      ),
+      note&&h("p",{className:"text-muted",style:{fontSize:"10.5px",lineHeight:1.4,margin:"0 0 9px"}},note),
+      items.length===0?h("div",{className:"text-muted",style:{fontSize:"12px"}},onAdd?"none — add one":"none"):
+      items.map((it,i)=>h("div",{key:i,style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"7px"}},
+        h("span",{style:{width:"9px",height:"9px",borderRadius:"50%",border:"1.5px solid "+color,flex:"none"}}),
+        h("span",{className:"psy-mono",style:{fontWeight:700,minWidth:"52px",color}},it.n),
+        withDef&&h("div",{style:{flex:1,position:"relative"}},
+          h("input",{className:"input psy-mono",style:{height:"30px",fontSize:"12px"},placeholder:"default value",defaultValue:it.d==null?"":it.d}),
+        ),
+        onRemove&&removable.includes(it.n)&&h("button",{className:"btn btn-ghost",style:{padding:"3px",flex:"none",marginLeft:"auto"},title:"Remove port",onClick:()=>onRemove(it.n)},this.icon(h,"x",13)),
+      )),
+    );
+  }
+
+  // ---- COMPILE -----------------------------------------------------------
+  scrCompile(h){
+    const odes=[
+      ["dx/dt","a·x·(1 − x/K) − b·x·y"],
+      ["dy/dt","c·x·y − d·y"],
+    ];
+    const varMap=[["x","x_0"],["y","x_1"],["T","t"]];
+    const parMap=[["prey.r → a","a_0 = 0.4"],["prey.K → K","a_1 = 10"],["pred_prey.r_1 → b","a_2 = 0.2"],["pred_prey.r_2 → c","a_3 = 0.1"],["pred.r → d","a_4 = 0.2"]];
+    const ct=this.state.ctab;
+    const tabs=[["system","System ODEs"],["mappings","Mappings"],["context","Context"]];
+    const liveBadge=h("div",{key:"live",style:{display:"inline-flex",alignItems:"center",gap:"6px",fontSize:"11px",fontFamily:"var(--font-body)",fontWeight:600,letterSpacing:".06em",padding:"4px 9px",borderRadius:"4px",background:"color-mix(in srgb,var(--color-accent) 12%,transparent)",color:"var(--color-accent-800)"}},
+      h("span",{style:{width:"7px",height:"7px",borderRadius:"50%",background:"var(--color-accent)"}}),"LIVE — recompiles on edit");
+    return h("div",{style:{display:"flex",flexDirection:"column",height:"100%"}},
+      this.header(h,"Compilation","ecosystem → simulable system",[
+        liveBadge,
+        h("button",{className:"btn btn-primary",key:"s",onClick:()=>this.go("simulate")},this.icon(h,"play",15),"Simulate"),
+      ]),
+      // status strip + tabs
+      h("div",{style:{display:"flex",alignItems:"center",gap:"18px",padding:"0 26px",borderBottom:"1px solid var(--color-divider)",flex:"none"}},
+        h("div",{style:{display:"flex",alignItems:"center",gap:"7px",padding:"11px 0",color:"var(--color-accent-800)",fontFamily:"var(--font-heading)",fontWeight:600,fontSize:"14px"}},
+          this.icon(h,"check",15),"Compiled · no unresolved symbols"),
+        h("div",{style:{flex:1}}),
+        h("div",{style:{display:"flex",gap:"24px"}},tabs.map(([k,l])=>
+          h("div",{key:k,onClick:()=>this.setState({ctab:k}),style:{padding:"0 0 12px",marginBottom:"-1px",cursor:"pointer",fontFamily:"var(--font-heading)",fontWeight:ct===k?600:500,fontSize:"14px",
+            borderBottom:"2px solid "+(ct===k?"var(--color-accent)":"transparent"),color:ct===k?"var(--color-text)":"var(--color-neutral-600)",transition:"color .15s"}},l))),
+      ),
+      h("div",{className:"psy-scroll",style:{padding:"26px",maxWidth:"940px"}},
+        ct==="system"&&this.panel(h,"System ODEs",
+          h("div",null,
+            h("div",{style:{display:"flex",flexDirection:"column",gap:"14px"}},
+              odes.map((o,i)=>h("div",{key:i,className:"psy-mono",style:{fontSize:"20px"},
+                dangerouslySetInnerHTML:{__html:this.eqHtml(o[0].slice(1,2),o[1],true)}})),
+            ),
+            h("p",{className:"text-muted",style:{fontSize:"12px",marginTop:"18px",marginBottom:0}},"Two coupled ODEs produced by aggregating the prey, predator and interaction components. Editing or rewiring any component in the builder updates these equations live."),
+          ),
+        ),
+        ct==="mappings"&&h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"22px"}},
+          this.panel(h,"Variable mappings",
+            h("table",{className:"table"},h("tbody",null,varMap.map((r,i)=>h("tr",{key:i},
+              h("td",{className:"psy-mono",style:{color:"var(--color-accent)"}},r[0]),
+              h("td",{className:"text-muted"},"→"),
+              h("td",{className:"psy-mono"},r[1]),
+            )))),
+          ),
+          this.panel(h,"Parameter mappings",
+            h("table",{className:"table"},h("tbody",null,parMap.map((r,i)=>h("tr",{key:i},
+              h("td",{className:"psy-mono",style:{fontSize:"12px",color:"var(--color-accent)"}},r[0]),
+              h("td",{className:"psy-mono",style:{fontSize:"12px"}},r[1]),
+            )))),
+          ),
+        ),
+        ct==="context"&&h("div",{style:{display:"flex",flexDirection:"column",gap:"22px"}},
+          this.panel(h,"Time",
+            h("div",{style:{display:"flex",alignItems:"center",gap:"14px"}},
+              h("span",{className:"text-muted",style:{fontSize:"13px"}},"Independent variable simulated over"),
+              h("span",{className:"psy-mono",style:{fontSize:"20px",color:"var(--color-accent)",fontWeight:700}},"T"),
+            ),
+          ),
+          this.ctxPanel(h,"Utility functions","Supplement built-in functions — any callable returning a float, or a symbolic expression, usable inside assignments.",
+            [["frac_0","a, b, d","a/b if b ≠ 0 else d"],["temp","T","10·sin(T) + 20"]],"Add utility function"),
+          this.ctxPanel(h,"System parameters","System-wide definitions of a symbol — a constant, or a function of time / other parameters. These win over a child's input port of the same name.",
+            [["g","—","9.81"],["T_AVG","T_MAX, T_MIN","(T_MAX + T_MIN) / 2"]],"Add system parameter"),
+        ),
+      ),
+    );
+  }
+  ctxPanel(h,title,desc,rows,addLabel){
+    return h("div",{className:"blueprint",style:{background:"var(--color-bg)",padding:"18px"}},
+            h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"14px",marginBottom:"6px"}},
+        h("h5",{style:{fontSize:"13px",textTransform:"uppercase",letterSpacing:".06em",margin:0}},title),
+        h("button",{className:"btn btn-secondary",style:{fontSize:"12px",padding:"5px 10px"}},this.icon(h,"plus",14),addLabel),
+      ),
+      h("p",{className:"text-muted",style:{fontSize:"12px",margin:"0 0 12px",maxWidth:"640px"}},desc),
+      h("table",{className:"table"},
+        h("thead",null,h("tr",null,h("th",null,"name"),h("th",null,"signature"),h("th",null,"definition"))),
+        h("tbody",null,rows.map((r,i)=>h("tr",{key:i},
+          h("td",{className:"psy-mono",style:{color:"var(--color-accent)",fontWeight:700}},r[0]),
+          h("td",{className:"psy-mono text-muted",style:{fontSize:"13px"}},r[1]),
+          h("td",{className:"psy-mono",style:{fontSize:"13px"}},r[2]),
+        ))),
+      ),
+    );
+  }
+  panel(h,title,body){
+    return h("div",{className:"blueprint",style:{background:"var(--color-bg)",padding:"18px"}},
+            h("h5",{style:{fontSize:"13px",textTransform:"uppercase",letterSpacing:".06em",marginBottom:"14px"}},title),
+      body,
+    );
+  }
+
+  // ---- SIMULATE ----------------------------------------------------------
+  scrSimulate(h){
+    const S=this.state, P=S.params;
+    const data=S.ran?this.integrate():null;
+    const sliders=[
+      ["a","prey growth rate",0,1,0.01],["K","prey carrying capacity",1,20,0.5],
+      ["b","predation rate",0,0.6,0.01],["c","predator response",0,0.4,0.01],
+      ["d","predator death rate",0,0.6,0.01],
+    ];
+    return h("div",{style:{display:"flex",flexDirection:"column",height:"100%"}},
+      this.header(h,"Simulation","ecosystem",[
+        h("div",{key:"solv",className:"seg"},
+          ["continuous","discrete"].map(s=>h("label",{key:s,className:"seg-opt"},
+            h("input",{type:"radio",name:"solver",checked:S.solver===s,onChange:()=>this.setState({solver:s})}),s)),
+        ),
+        h("button",{className:"btn btn-primary",key:"r",onClick:()=>this.run()},this.icon(h,"play",15),"Run simulation"),
+      ]),
+      h("div",{style:{flex:1,display:"flex",minHeight:0}},
+        // params panel
+        h("div",{className:"psy-scroll",style:{width:"300px",flex:"none",borderRight:"1px solid var(--color-divider)",padding:"20px",background:"var(--color-bg)"}},
+          h("h6",{style:{margin:"0 0 14px"}},"Initial values"),
+          h("div",{style:{display:"flex",gap:"12px",marginBottom:"22px"}},
+            ["x0","y0"].map((k,i)=>h("div",{key:k,className:"field",style:{flex:1}},
+              h("label",{className:"psy-mono"},["x","y"][i]," (0)"),
+              h("input",{className:"input psy-mono",type:"number",value:P[k],onChange:(e)=>this.setP(k,+e.target.value)}))),
+          ),
+          h("h6",{style:{margin:"0 0 14px"}},"Parameters"),
+          sliders.map(([k,label,min,max,step])=>h("div",{key:k,style:{marginBottom:"16px"}},
+            h("div",{style:{display:"flex",justifyContent:"space-between",fontSize:"12px",marginBottom:"4px"}},
+              h("span",null,h("span",{className:"psy-mono",style:{color:"var(--color-accent)",fontWeight:700}},k),h("span",{className:"text-muted"}," · "+label)),
+              h("span",{className:"psy-mono",style:{fontWeight:700}},P[k]),
+            ),
+            h("input",{type:"range",min,max,step,value:P[k],style:{width:"100%",background:"linear-gradient(to right,var(--color-accent) 0 "+((P[k]-min)/(max-min)*100)+"%,var(--color-neutral-200) "+((P[k]-min)/(max-min)*100)+"% 100%)"},onChange:(e)=>this.setP(k,+e.target.value)}),
+          )),
+          h("div",{className:"field",style:{marginTop:"8px"}},
+            h("label",null,"t_end"),
+            h("input",{className:"input psy-mono",type:"number",value:P.tend,onChange:(e)=>this.setP("tend",+e.target.value)})),
+          !S.ran&&h("div",{style:{marginTop:"14px",padding:"10px",border:"1px solid var(--color-accent)",fontSize:"12px",color:"var(--color-accent-800)",display:"flex",alignItems:"center",gap:"8px"}},
+            this.icon(h,"dot",15),"Parameters changed — re-run to update."),
+        ),
+        // results
+        h("div",{style:{flex:1,display:"flex",flexDirection:"column",minWidth:0}},
+          h("div",{style:{display:"flex",gap:"24px",padding:"12px 20px 0",borderBottom:"1px solid var(--color-divider)"}},
+            [["time","Time series"],["phase","Phase plane"],["table","Data table"]].map(([k,l])=>
+              h("div",{key:k,onClick:()=>this.setState({tab:k}),style:{padding:"0 0 12px",marginBottom:"-1px",cursor:"pointer",fontFamily:"var(--font-heading)",fontWeight:S.tab===k?600:500,fontSize:"14px",
+                borderBottom:"2px solid "+(S.tab===k?"var(--color-accent)":"transparent"),
+                color:S.tab===k?"var(--color-text)":"var(--color-neutral-600)",transition:"color .15s"}},l)),
+          ),
+          h("div",{className:"psy-scroll",style:{flex:1,padding:"22px"}},
+            !data?h("div",{className:"text-muted",style:{textAlign:"center",marginTop:"60px"}},"Run the simulation to see results."):
+            S.tab==="time"?this.plotTime(h,data):
+            S.tab==="phase"?this.plotPhase(h,data):
+            this.dataTable(h,data),
+          ),
+        ),
+      ),
+    );
+  }
+
+  plotTime(h,d){
+    const W=720,H=360,pad=44;
+    const tmax=d.T[d.T.length-1], vmax=Math.max(...d.X,...d.Y,1)*1.08;
+    const sx=t=>pad+t/tmax*(W-pad-14), sy=v=>H-pad-v/vmax*(H-pad-14);
+    const line=(arr,col)=>h("path",{d:arr.map((v,i)=>(i?"L":"M")+sx(d.T[i])+" "+sy(v)).join(" "),fill:"none",stroke:col,strokeWidth:2});
+    const yt=[0,0.25,0.5,0.75,1].map(f=>+(vmax*f).toFixed(1));
+    const xt=[0,0.25,0.5,0.75,1].map(f=>Math.round(tmax*f));
+    return h("div",null,
+      this.plotFrame(h,W,H,"velocity",
+        [
+          yt.map((v,i)=>h("g",{key:"y"+i},h("line",{x1:pad,y1:sy(v),x2:W-14,y2:sy(v),stroke:"var(--color-divider)",strokeWidth:1}),
+            h("text",{x:pad-8,y:sy(v)+4,textAnchor:"end",fontSize:11,fill:"var(--color-neutral-600)"},v))),
+          xt.map((t,i)=>h("text",{key:"x"+i,x:sx(t),y:H-pad+18,textAnchor:"middle",fontSize:11,fill:"var(--color-neutral-600)"},t)),
+          line(d.X,"var(--color-accent)"), line(d.Y,"var(--color-accent-2-800)"),
+        ],"time  t","population"),
+      h("div",{style:{display:"flex",gap:"20px",marginTop:"14px",fontSize:"13px"}},
+        h("span",{style:{display:"flex",alignItems:"center",gap:"7px"}},h("span",{style:{width:"18px",height:"2.5px",background:"var(--color-accent)"}}),h("span",{className:"psy-mono"},"x — prey")),
+        h("span",{style:{display:"flex",alignItems:"center",gap:"7px"}},h("span",{style:{width:"18px",height:"2.5px",background:"var(--color-accent-2-800)"}}),h("span",{className:"psy-mono"},"y — predator")),
+      ),
+    );
+  }
+  plotPhase(h,d){
+    const W=520,H=440,pad=44;
+    const xmax=Math.max(...d.X,1)*1.08, ymax=Math.max(...d.Y,1)*1.08;
+    const sx=v=>pad+v/xmax*(W-pad-14), sy=v=>H-pad-v/ymax*(H-pad-14);
+    const path=d.X.map((v,i)=>(i?"L":"M")+sx(v)+" "+sy(d.Y[i])).join(" ");
+    return h("div",null,
+      this.plotFrame(h,W,H,"",
+        [
+          [0.25,0.5,0.75,1].map((f,i)=>h("line",{key:"gx"+i,x1:sx(xmax*f),y1:pad-8,x2:sx(xmax*f),y2:H-pad,stroke:"var(--color-divider)"})),
+          [0.25,0.5,0.75,1].map((f,i)=>h("line",{key:"gy"+i,x1:pad,y1:sy(ymax*f),x2:W-14,y2:sy(ymax*f),stroke:"var(--color-divider)"})),
+          h("path",{d:path,fill:"none",stroke:"var(--color-accent)",strokeWidth:2}),
+          h("circle",{cx:sx(d.X[0]),cy:sy(d.Y[0]),r:4,fill:"var(--color-bg)",stroke:"var(--color-accent-800)",strokeWidth:2}),
+          h("circle",{cx:sx(d.X[d.X.length-1]),cy:sy(d.Y[d.Y.length-1]),r:5,fill:"var(--color-accent)"}),
+        ],"prey  x","predator  y"),
+      h("div",{className:"text-muted",style:{fontSize:"12px",marginTop:"12px"}},"○ initial state · ● final state — the trajectory spirals toward the steady state (x=2, y=1.6)."),
+    );
+  }
+  plotFrame(h,W,H,_,inner,xlab,ylab){
+    const pad=44;
+    return h("svg",{viewBox:`0 0 ${W} ${H}`,style:{width:"100%",maxWidth:W+"px",display:"block"}},
+      h("rect",{x:pad,y:pad-8,width:W-pad-14,height:H-pad-(pad-8),fill:"none",stroke:"var(--color-divider)"}),
+      inner,
+      h("line",{x1:pad,y1:pad-8,x2:pad,y2:H-pad,stroke:"var(--color-text)",strokeWidth:1}),
+      h("line",{x1:pad,y1:H-pad,x2:W-14,y2:H-pad,stroke:"var(--color-text)",strokeWidth:1}),
+      xlab&&h("text",{x:(W+pad)/2,y:H-6,textAnchor:"middle",fontSize:12,fill:"var(--color-text)",fontFamily:"var(--font-heading)"},xlab),
+      ylab&&h("text",{x:14,y:(H)/2,textAnchor:"middle",fontSize:12,fill:"var(--color-text)",fontFamily:"var(--font-heading)",transform:`rotate(-90 14 ${H/2})`},ylab),
+    );
+  }
+  dataTable(h,d){
+    const rows=d.T.map((t,i)=>[t,d.X[i],d.Y[i]]).filter((_,i)=>i%5===0);
+    return h("div",{style:{maxWidth:"520px"}},
+      h("div",{className:"text-muted",style:{fontSize:"12px",marginBottom:"10px"}},"time_series · showing every 5th sample of ",d.T.length," points"),
+      h("table",{className:"table psy-mono"},
+        h("thead",null,h("tr",null,h("th",null,"t"),h("th",null,"x — prey"),h("th",null,"y — predator"))),
+        h("tbody",null,rows.map((r,i)=>h("tr",{key:i},
+          h("td",null,r[0].toFixed(2)),
+          h("td",{style:{color:"var(--color-accent)"}},r[1].toFixed(4)),
+          h("td",{style:{color:"var(--color-accent-2-800)"}},r[2].toFixed(4)),
+        ))),
+      ),
+    );
+  }
+
+  componentDidMount(){
+    // render lucide-ish icons in the nav template spans
+    this.paintNavIcons();
+  }
+  componentDidUpdate(){
+    this.paintNavIcons();
+    if(this.state.screen==="builder" && this.canvasEl && !this._fitted){
+      this._fitted=true;
+      requestAnimationFrame(()=>this.fitView());
+    }
+    if(this.state.screen!=="builder") this._fitted=false;
+  }
+  paintNavIcons(){
+    const map={grid:'<path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/>',
+      box:'<path d="M21 8v8l-9 5-9-5V8l9-5 9 5z"/><path d="M3.3 7L12 12l8.7-5"/><path d="M12 22V12"/>',
+      share:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="12" r="3"/><path d="M8.6 7.5l6.8 3.5"/><path d="M15.4 12.9L8.6 16.5"/>',
+      sliders:'<path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/>',
+      function:'<path d="M9 4h3a2 2 0 012 2"/><path d="M7 20c2 0 3-1 3-4V8c0-3 1-4 3-4"/><path d="M5 12h6"/>',
+      sigma:'<path d="M18 7V5a1 1 0 00-1-1H6.5a.5.5 0 00-.4.8L12 12l-5.9 7.2a.5.5 0 00.4.8H17a1 1 0 001-1v-2"/>',
+      chart:'<path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/>'};
+    document.querySelectorAll('.psy-nav-item [data-icon]').forEach(el=>{
+      const k=el.getAttribute('data-icon');
+      if(el.dataset.done===k) return;
+      el.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">'+(map[k]||'')+'</svg>';
+      el.dataset.done=k;
+    });
+    const rc=document.querySelector('.psy-rail-toggle [data-rail-chevron]');
+    if(rc && !rc.dataset.done){
+      rc.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5"/><path d="M18 17l-5-5 5-5"/></svg>';
+      rc.dataset.done="1";
+    }
+  }
+}
+</script>
+</body>
+</html>
