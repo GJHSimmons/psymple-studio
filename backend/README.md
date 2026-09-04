@@ -28,10 +28,13 @@ python -m venv .venv
 
 ## Run
 
+From the repo root:
+
 ```bash
-backend/.venv/Scripts/uvicorn app.main:app --reload --port 8000
+backend/.venv/Scripts/python -m uvicorn app.main:app --app-dir backend --port 8000 --reload
 ```
 
-(run from `backend/`). A `.claude/launch.json` entry is provided for the dev preview.
+`--app-dir backend` puts `backend/` on the import path so `app.main` resolves.
+A `backend-dev` entry in `.claude/launch.json` runs the same thing for the dev preview.
 
 `.venv/` is gitignored; `requirements.txt` pins exact versions for reproducibility.
