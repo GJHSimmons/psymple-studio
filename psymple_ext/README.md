@@ -11,16 +11,24 @@ never on `backend/`.
 
 ## Layout (mirrors psymple)
 
+The package uses a `src/` layout so `import psymple_ext` always resolves to the
+installed package, never to this project directory (which shares its name).
+
 ```
 psymple_ext/
-  build/
-    ingestion.py    # spec dict -> FunctionalPortedObject / VariablePortedObject
-                    #   / CompositePortedObject + System   (recursive builder)
-    inspection.py   # compiled System -> structured dict:
-                    #   ODEs, variable mappings, parameter mappings, context
-  simulate/
-    runner.py       # System + options -> { times, series }
+  pyproject.toml
+  src/psymple_ext/
+    build/
+      ingestion.py    # spec dict -> FunctionalPortedObject / VariablePortedObject
+                      #   / CompositePortedObject + System   (recursive builder)
+      inspection.py   # compiled System -> structured dict:
+                      #   ODEs, variable mappings, parameter mappings, context
+    simulate/
+      runner.py       # System + options -> { times, series }
+  tests/
 ```
+
+Install editable into the backend venv: `pip install -e ../psymple_ext`.
 
 ## Style boundary
 
