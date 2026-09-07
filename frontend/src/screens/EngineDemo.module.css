@@ -1,0 +1,87 @@
+/*
+ * Styles for the provisional engine demonstrators on the Compilation and
+ * Simulation screens. These are scaffolding: the Screens stream replaces the
+ * real screen bodies, at which point this module is removed. No design tokens
+ * are added to the theme hub for throwaway UI — the one error colour is local.
+ */
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: var(--space-7);
+  gap: var(--space-5);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.provisional {
+  max-width: 520px;
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.status {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+.banner {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-control);
+  background: #fbeaea;
+  border: 1px solid #e6b7b7;
+  color: #8a2b2b;
+  font-size: 13px;
+}
+
+.readout {
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  border: 1px solid var(--color-neutral-200);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.sectionLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  margin-top: var(--space-4);
+}
+
+.sectionLabel:first-child {
+  margin-top: 0;
+}

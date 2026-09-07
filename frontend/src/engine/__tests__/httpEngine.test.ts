@@ -10,12 +10,14 @@ import type { CompiledSystem, SimulationResult } from "../index";
  * backend. The real round-trip is verified against the running service separately.
  */
 
+// Shapes mirror the real backend: surface variables keep short names (x, y);
+// parameters are suffixed short symbols traced back by the mappings.
 const COMPILE_RESPONSE: CompiledSystem = {
   odes: [
-    { variable: "x_0", expression: "r_0*x_0 - r_0/K_0*x_0**2 + r_1*x_0*y_0" },
-    { variable: "y_0", expression: "r_2*x_0*y_0 + r_3*y_0" },
+    { variable: "x", expression: "r_0*x - r_0/K_0*x**2 + r_1*x*y" },
+    { variable: "y", expression: "r_2*x*y + r_3*y" },
   ],
-  variableMappings: { x_0: "ecosystem.x", y_0: "ecosystem.y" },
+  variableMappings: { x: "ecosystem.x", y: "ecosystem.y" },
   parameterMappings: {
     r_0: "ecosystem.prey.r",
     K_0: "ecosystem.prey.K",
@@ -30,7 +32,7 @@ const COMPILE_RESPONSE: CompiledSystem = {
 
 const SIMULATE_RESPONSE: SimulationResult = {
   times: [0, 1, 2],
-  series: { x_0: [8, 8.4, 8.7], y_0: [3, 2.9, 2.8] },
+  series: { x: [8, 8.4, 8.7], y: [3, 2.9, 2.8] },
 };
 
 function mockFetchOnce(body: unknown, init: { status?: number } = {}) {
@@ -74,7 +76,7 @@ describe("httpEngine", () => {
 
     const engine = createHttpEngine("/api");
     const result = await engine.simulate(seedEcosystem, {
-      initialValues: { x_0: 8, y_0: 3 },
+      initialValues: { x: 8, y: 3 },
       tEnd: 50,
       solver: "continuous",
     });
@@ -84,12 +86,12 @@ describe("httpEngine", () => {
     const sent = JSON.parse(options.body);
     // The tree travels with the options — no compiled-system handle (#23).
     expect(sent.tree).toEqual(seedEcosystem);
-    expect(sent.initialValues).toEqual({ x_0: 8, y_0: 3 });
+    expect(sent.initialValues).toEqual({ x: 8, y: 3 });
     expect(sent.tEnd).toBe(50);
     expect(sent.solver).toBe("continuous");
 
     expect(result.times).toEqual(SIMULATE_RESPONSE.times);
-    expect(result.series.x_0).toHaveLength(result.times.length);
+    expect(result.series.x).toHaveLength(result.times.length);
   });
 
   it("trims a trailing slash on the base URL", async () => {

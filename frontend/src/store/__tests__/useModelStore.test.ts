@@ -9,8 +9,8 @@ import type {
 import { createModelStore } from "../useModelStore";
 
 const COMPILED: CompiledSystem = {
-  odes: [{ variable: "x_0", expression: "r_0*x_0" }],
-  variableMappings: { x_0: "ecosystem.x" },
+  odes: [{ variable: "x", expression: "r_0*x" }],
+  variableMappings: { x: "ecosystem.x" },
   parameterMappings: { r_0: "ecosystem.prey.r" },
   context: { r_0: 0.4 },
   functions: {},
@@ -19,7 +19,7 @@ const COMPILED: CompiledSystem = {
 
 const SIMULATED: SimulationResult = {
   times: [0, 1],
-  series: { x_0: [8, 8.3] },
+  series: { x: [8, 8.3] },
 };
 
 function fakeEngine(overrides: Partial<EngineInterface> = {}): EngineInterface {
@@ -69,10 +69,10 @@ describe("useModelStore", () => {
     const store = createModelStore(fakeEngine());
     await store
       .getState()
-      .simulate({ initialValues: { x_0: 8 }, tEnd: 50, solver: "continuous" });
+      .simulate({ initialValues: { x: 8 }, tEnd: 50, solver: "continuous" });
     const s = store.getState();
     expect(s.simulateStatus).toBe("ready");
-    expect(s.simulation?.series.x_0).toHaveLength(s.simulation!.times.length);
+    expect(s.simulation?.series.x).toHaveLength(s.simulation!.times.length);
   });
 
   it("setTree clears prior compile/simulate output", async () => {
