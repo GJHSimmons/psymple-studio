@@ -6,6 +6,16 @@ This wraps ``System.create_simulation(...).simulate(...)`` and reads the resulti
 time series off ``sim.time`` and ``sim.variables``. The continuous solver uses
 scipy's ``solve_ivp``; the discrete solver is a fixed-step Euler integrator that
 needs a number of substeps per time unit, derived here from the step size ``dt``.
+
+The two solvers produce different time grids, both inherited from psymple:
+
+- continuous samples ``arange(0, t_end, 0.1)`` — step 0.1, **excluding** ``t_end``;
+- discrete samples every substep from 0 through ``t_end`` **inclusive**, with
+  ``n_steps = round(1 / dt)`` substeps per unit time. A ``dt`` that is not the
+  reciprocal of an integer is rounded (e.g. ``dt=0.3`` becomes ``1/3``).
+
+So the two series do not share an end sample, and a discrete ``dt`` may be
+normalised. Callers that need a specific grid should post-process ``times``.
 """
 
 DEFAULT_DISCRETE_STEPS = 10
