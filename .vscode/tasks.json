@@ -1,0 +1,36 @@
+{
+  // One-click launch for Psymple Studio (backend + frontend).
+  // Run:  Ctrl+Shift+P -> "Tasks: Run Task" -> "app".
+  // First-time setup is required once (see backend/README.md):
+  //   python -m venv backend\.venv
+  //   backend\.venv\Scripts\pip install -r backend\requirements.txt
+  //   backend\.venv\Scripts\pip install -e psymple_ext
+  //   npm install --prefix frontend
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "backend",
+      "type": "shell",
+      "command": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
+      "args": ["-m", "uvicorn", "app.main:app", "--app-dir", "backend", "--port", "8000", "--reload"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "group": "app", "panel": "dedicated", "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "frontend",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "presentation": { "group": "app", "panel": "dedicated", "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "app",
+      "dependsOn": ["backend", "frontend"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  // Make VS Code pick up the backend virtualenv automatically (IntelliSense, debugger).
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true
+}
