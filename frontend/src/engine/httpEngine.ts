@@ -57,7 +57,7 @@ async function postJson<T>(url: string, payload: unknown): Promise<T> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-  } catch (cause) {
+  } catch {
     // Network failure / backend unreachable — no HTTP status to report.
     throw new EngineError(
       0,
