@@ -8,6 +8,11 @@ until it does.
 Streams: **Foundation** (`shell`), **Engine** (`engine`), **Builder** (`builder`),
 **Screens** (`screens`). See the repository map in `CLAUDE.md`.
 
+> **Reversal (ARCH #17, supersedes #1):** the original plan phased a *mock* TypeScript engine
+> (W1–W2) ahead of real psymple (W3). That mock turned out to mean re-implementing psymple's
+> compiler, so it was dropped. Real psymple — via a thin FastAPI backend + `psymple_ext` —
+> now lands in **Wave 1**, and Wave 3 becomes hardening + upstream transfer.
+
 ---
 
 ## Wave 1 — Foundation + Engine
@@ -20,14 +25,16 @@ Stand up the app and the engine seam so every later screen has something real to
   shadows, typography from the design handoff); the layout shell (collapsible nav rail,
   216px/60px, four screens, accent active-tick); routing / screen registry; shared UI
   primitives (Button, Tag, Segmented, Modal).
-- `W1-Engine` — the `EngineInterface` contract (`compile`, `simulate`, model types); the
-  ported-object data model (name, type, ports {in/out/var}, assignments, children, wires);
-  the seed Lotka–Volterra model; a **mock TypeScript engine** implementing the interface
-  (live compile + fixed-step simulate).
+- `W1-Engine` — the `EngineInterface` contract as an **HTTP client to a FastAPI backend
+  running real psymple**; the ported-object data model (name, type, ports {in/out/var},
+  assignments, children, directed + variable wires); the seed Lotka–Volterra model;
+  `psymple_ext` (ingestion: spec dict → psymple `System`; inspection: compiled `System` →
+  structured JSON); the backend `/compile` + `/simulate` endpoints in a pinned `.venv`. No
+  mock (ARCH #17).
 
-**Closes when:** the app boots to the shell, all four nav destinations render (placeholder
-is fine for Builder/screens), and the mock engine compiles **and** simulates the seed model
-end-to-end, demonstrated by a test or a rendered screen.
+**Closes when:** the app boots to the shell, all four nav destinations render (placeholder is
+fine for Builder/screens), and the frontend compiles **and** simulates the seed model
+end-to-end **through the real psymple backend**, demonstrated by a test or a rendered screen.
 
 ---
 
@@ -52,23 +59,18 @@ end-to-end — edits in the Builder flow through to Compilation and Simulation.
 
 ---
 
-## Wave 3 — Real psymple engine + polish
+## Wave 3 — Hardening, upstream transfer, deploy
 
-Replace the mock engine with real psymple behind the identical `EngineInterface`, and build
-the psymple-adjacent capabilities that make that possible.
+Real psymple moved into Wave 1 (ARCH #17), so this wave is no longer about *reaching* psymple —
+it is what remains once the app works end-to-end.
 
 **Milestones**
 
-- `W3-Engine` — first a `[DESIGN]`/`[ARCH]` decision on the split between what goes upstream
-  into psymple and what stays Studio glue; then `psymple_ext/` (ingestion from a spec dict;
-  structured inspection of a compiled `System`) written in psymple's research-engineering
-  style for later transfer; then a thin `backend/app/` FastAPI adapter exposing the
-  `EngineInterface`; then swap the frontend onto it and verify parity against the mock.
+- `W3-Engine` — harden the backend (error handling, input validation, larger models); finalise
+  `psymple_ext/` for **upstream transfer** to a future psymple release (a near-verbatim
+  `git mv`, in psymple's own style — see *Code style boundaries* in `CLAUDE.md` and DESIGN #2);
+  decide and record the precise per-capability upstream/glue split; and a deployment story (the
+  Pyodide serverless option noted in #17 remains a fallback if a static deploy is required).
 
-**Closes when:** the app runs against real psymple 1.0.4 — the Compilation and Simulation
-screens show genuine psymple output — and `psymple_ext/` is self-contained enough to lift
-upstream with `git mv`.
-
-**Note on `psymple_ext/`:** it is built here but destined for a future psymple release. It
-is written to psymple's own style (pragmatic, not over-complete, lightly tested) — see the
-*Code style boundaries* section of `CLAUDE.md` and the DESIGN decision recorded at adoption.
+**Closes when:** `psymple_ext/` is self-contained enough to lift upstream, and the app has a
+documented run/deploy path.

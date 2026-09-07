@@ -27,12 +27,13 @@ simulation view.
 **The boundary newcomers get wrong:** Studio does not *compute* the mathematics — psymple
 does. The UI only edits a *tree spec*. Compilation (sympy substitution + variable
 aggregation) and simulation (scipy `solve_ivp` / forward Euler) are psymple's job, reached
-through a single `EngineInterface` seam. Everything shown on the Compilation and Simulation
-screens — flattened ODEs, `x → x_0` variable/parameter mappings, time series — is engine
-*output*, never UI-derived. During early waves that engine is a **mock TypeScript**
-implementation of the interface; a later wave swaps in a real psymple-backed implementation
-behind the identical contract. "Is this the mock or the real engine?" is the first question
-when reasoning about any number on screen.
+through a single `EngineInterface` seam whose one implementation is an HTTP client to a thin
+**FastAPI backend that runs real psymple** (`backend/` + `psymple_ext/`). Everything shown on
+the Compilation and Simulation screens — flattened ODEs, `x → x_0` variable/parameter
+mappings, time series — is **real psymple output**, never UI-derived. There is no mock engine:
+an earlier phased-hybrid plan with a mock TS engine was reversed once it became clear the mock
+meant re-implementing psymple's compiler (see ARCH #17, superseding #1). The frontend edits a
+tree *spec*; the backend compiles and simulates it.
 
 **Companion package:** `casasglobal-org/psymple` (PyPI `psymple`, pinned ≥ 1.0.4) — the
 modelling engine. The binding contract is the `EngineInterface` (see the repository map)
@@ -41,12 +42,12 @@ here but destined for a future psymple release.
 
 ## Code style boundaries
 
-Three categories of code live here under two style regimes. Getting this wrong is a
+Two categories of code live here under two style regimes. Getting this wrong is a
 funding-relevant error, so it is spelled out.
 
-- **Studio app** (`frontend/`, `backend/app/`) — the interface itself. Conventional,
-  stable, tested to the standard of a shipped product. This is the "*stable* interface"
-  half of the brief.
+- **Studio app** (`frontend/`, `backend/app/`) — the interface itself: the React frontend and
+  the thin FastAPI glue that exposes psymple. Conventional, stable, tested to the standard of
+  a shipped product. This is the "*stable* interface" half of the brief.
 - **psymple-adjacent** (`psymple_ext/`) — capabilities that are really psymple features:
   model *ingestion* from a spec dict, and structured *inspectability* of a compiled system.
   Built here now and **transferred to a future psymple release later.** Written in
@@ -55,9 +56,8 @@ funding-relevant error, so it is spelled out.
   so the eventual transfer is a near-verbatim `git mv`, not a refactor. Do **not** gold-plate
   it and do not add test scaffolding psymple itself would not carry. Keep it importable
   independently of Studio glue.
-- **Mock TS engine** (`frontend/src/engine/mock/`) — a temporary stand-in implementing
-  `EngineInterface` for waves 1–2. Studio code, never destined for psymple; demoted once the
-  real engine lands.
+
+There is **no mock engine** — that phased-hybrid category was removed by ARCH #17.
 
 `psymple_ext/` mirrors psymple's package layout (`psymple/build/`, `psymple/simulate/`) so
 its modules map onto psymple modules directly. See DESIGN decision #2.
@@ -75,12 +75,12 @@ Part 2 read this marking.
 | `frontend/src/theme/` | Design tokens: colours, radii, shadows, typography | **hub** |
 | `frontend/src/app/` | App shell: nav rail, routing, screen registry | **hub** |
 | `frontend/src/ui/` | Shared primitives (Button, Tag, Modal, Segmented, …) | **hub** |
-| `frontend/src/engine/` | `EngineInterface`, model types, seed model | **hub** (interface + types) |
-| `frontend/src/engine/mock/` | Mock TS engine (compile + simulate) | |
+| `frontend/src/engine/` | `EngineInterface` (HTTP client to the backend), model types, seed model | **hub** (interface + types) |
 | `frontend/src/builder/` | Nested canvas: nodes, ports, wires, inspector, modals | |
 | `frontend/src/screens/` | Dashboard, Compilation, Simulation + charts | |
-| `backend/` | (W3) FastAPI adapter over psymple; reserved, README-only until then | |
-| `psymple_ext/` | (W3) psymple-adjacent ingestion/inspection, upstream-bound | **hub** (upstream contract) |
+| `backend/app/` | FastAPI service over psymple: `/compile`, `/simulate` + wire-contract DTOs | **hub** (wire contract) |
+| `backend/.venv/` | Backend virtualenv, pinned deps; **gitignored** | |
+| `psymple_ext/` | psymple-adjacent ingestion + inspection, upstream-bound | **hub** (upstream contract) |
 | `.claude/worktrees/` | Parallel-agent worktrees; **gitignored** | |
 | `.claude/resume/` | Suspension resume notes; **committed** | |
 
@@ -89,7 +89,7 @@ Part 2 read this marking.
 | Stream | Issue prefix | Concern |
 |---|---|---|
 | **Foundation** | `shell` | Scaffold, build tooling, design tokens, layout shell, routing, shared UI primitives |
-| **Engine** | `engine` | `EngineInterface`, model types, mock TS engine (compile + simulate), seed model; later the psymple backend + `psymple_ext` |
+| **Engine** | `engine` | `EngineInterface` (HTTP client), model types, seed model, the FastAPI backend, and `psymple_ext` (ingestion + inspection) — real psymple from the start (ARCH #17) |
 | **Builder** | `builder` | Nested canvas: node/port/wire rendering, pan/zoom, drag, wiring, add-port, nesting, inspector, Library + Object Editor modals |
 | **Screens** | `screens` | Dashboard, Compilation, Simulation screens + SVG charts |
 
@@ -104,26 +104,6 @@ both only *consume* the design tokens and the engine interface.
 | **Roadmap document** | `docs/ROADMAP.md` |
 | **Decision archive** | none (greenfield adoption) |
 | **Granularity experiment** | **inactive** |
-
----
-
-## Migration status
-
-Greenfield adoption — there are no prior tracking files to migrate. Until every box below is
-checked, Part 2's task and decision mechanics are still being stood up. **Do not silently
-work around this list; if a task requires something on it, that is a reason to do the setup
-item.**
-
-- [x] Restructure `CLAUDE.md` into Part 1 + Part 2
-- [x] Gitignore the worktree root
-- [x] Create the labels (Part 2 → *Create the labels*)
-- [x] Write the roadmap (`docs/ROADMAP.md`)
-- [x] Create the milestones: `W1-Foundation`, `W1-Engine`, `W2-Builder`, `W2-Screens`, `W3-Engine`
-- [x] File the W1 task issues (#3 Foundation, #4 Engine)
-- [n/a] Migrate open tasks — none exist
-- [n/a] Freeze existing archives — none exist
-
-Adoption complete. This section can be deleted once the adoption PR merges.
 
 ---
 
