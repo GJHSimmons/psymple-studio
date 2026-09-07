@@ -4,6 +4,8 @@ frontend's `EngineInterface` client calls. Studio glue: thin, stateless, and it
 does no modelling maths itself — that is psymple's job, via `psymple_ext`.
 """
 
+from tokenize import TokenError
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,12 +16,16 @@ from .dtos import CompiledSystem, CompileRequest, SimulateRequest, SimulationRes
 from .engine import compile_spec, simulate_spec
 
 # Errors that mean "the submitted model is invalid" rather than "the server broke".
+# SyntaxError / TokenError are what sympy's parse_expr raises on a malformed
+# assignment expression (e.g. "2*" or "@@@") — the commonest thing the editor POSTs.
 MODEL_ERRORS = (
     WiringError,
     ValidationError,
     SystemError,
     DependencyError,
     ParsingError,
+    SyntaxError,
+    TokenError,
     ValueError,
     KeyError,
 )

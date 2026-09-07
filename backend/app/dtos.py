@@ -90,6 +90,9 @@ class CompiledSystem(_CamelModel):
     variable_mappings: dict[str, str] = Field(serialization_alias="variableMappings")
     parameter_mappings: dict[str, str] = Field(serialization_alias="parameterMappings")
     context: dict[str, float]
+    # short parameter symbol -> expression (in short symbols) for parameters that are
+    # functions of the model's inputs rather than constants.
+    functions: dict[str, str]
     required_inputs: list[str] = Field(serialization_alias="requiredInputs")
 
 
